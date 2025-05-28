@@ -35,7 +35,6 @@ float humi;
 float temp;
 bool cdsFlag = false;
 int getSensorTime;
-DHT dht(DHTPIN, DHTTYPE);
 SoftwareSerial BTSerial(10, 11); // RX ==>BT:TXD, TX ==> BT:RXD
 int varValue;
 int varValueold;
@@ -49,13 +48,10 @@ void setup()
   lcd.backlight();
   lcdDisplay(0, 0, lcdLine1);
   lcdDisplay(0, 1, lcdLine2);
-  pinMode(BUTTON_PIN,INPUT);
-  pinMode(LED_BUILTIN_PIN, OUTPUT);
  
   BTSerial.begin(9600); // set the data rate for the SoftwareSerial port
   MsTimer2::set(1000, timerIsr); // 1000ms period
   MsTimer2::start();
-  dht.begin();
 }
 
 void loop()
@@ -63,71 +59,13 @@ void loop()
   if (BTSerial.available())
     bluetoothEvent();
 
-/*
-  varValue = analogRead(A1);  //0~1023
-  varValue = map(varValue,0,1023,0,100);
-  if(abs(varValue-varValueold) > 1)
-  {
-  //  Serial.println(varValue);
-    varValueold = varValue;
-    sprintf(sendBuf,"[%s]MOTOR@%d\n","KSH_BT",varValue);
-    BTSerial.write(sendBuf);   
-  }
-*/
   if (timerIsrFlag)
   {
     timerIsrFlag = false;
-    cds = map(analogRead(CDS_PIN), 0, 1023, 0, 100);
-    humi = dht.readHumidity();
-    temp = dht.readTemperature();
-
-    sprintf(lcdLine2,"C:%d T:%d H:%d",cds,(int)temp,(int)humi);
-#ifdef DEBUG
- //   Serial.println(lcdLine2);
-#endif
     
-    lcdDisplay(0, 1, lcdLine2);
-
-    if(getSensorTime != 0 && !(secCount % getSensorTime)) {
-      char tempStr[5];
-      char humiStr[5];
-      dtostrf(humi, 4, 1, humiStr);  //50.0 4:전체자리수,1:소수이하 자리수
-      dtostrf(temp, 4, 1, tempStr);  //25.1
-      sprintf(sendBuf,"[%s]SENSOR@%d@%s@%s\r\n",recvId,cds,tempStr,humiStr);
-      BTSerial.write(sendBuf);   
-    }    
-    
-    if ((cds >= 50) && cdsFlag)
-    {
-      cdsFlag = false;
-      sprintf(sendBuf, "[%s]CDS@%d\n", recvId, cds);
-      BTSerial.write(sendBuf, strlen(sendBuf));
-    } 
-    else if ((cds < 50) && !cdsFlag)
-    {
-      cdsFlag = true;
-      sprintf(sendBuf, "[%s]CDS@%d\n", recvId, cds);
-      BTSerial.write(sendBuf, strlen(sendBuf));
-    }
+    lcdDisplay(0, 1, lcdLine2);  
   }
-  currentButton = debounce(lastButton);   // 디바운싱된 버튼 상태 읽기
-  if (lastButton == HIGH && currentButton == LOW)  // 버튼을 누르면...
-  {
-    ledOn = !ledOn;       // LED 상태 값 반전
-    digitalWrite(LED_BUILTIN_PIN, ledOn);     // LED 상태 변경
-    //sprintf(sendBuf, "[%s]BUTTON@%s\n", recvId, ledOn ? "ON" : "OFF");
-    sprintf(sendBuf, "[%s]%s\n", "HM_CON", ledOn ? "GASON" : "GASOFF"); //테스트를 위한 코드. 프로젝트시에서는 윗 줄 쓰면 된다.
-    BTSerial.write(sendBuf);
-#ifdef DEBUG
-    Serial.println(sendBuf);
-#endif
-  }
-  lastButton = currentButton;     // 이전 버튼 상태를 현재 버튼 상태로 설정
-
-#ifdef DEBUG
-  if (Serial.available())
-    BTSerial.write(Serial.read());
-#endif
+ 
 }
 void bluetoothEvent()
 {
@@ -221,14 +159,4 @@ void lcdDisplay(int x, int y, char * str)
   lcd.print(str);
   for (int i = len; i > 0; i--)
     lcd.write(' ');
-}
-boolean debounce(boolean last)
-{
-  boolean current = digitalRead(BUTTON_PIN);  // 버튼 상태 읽기
-  if (last != current)      // 이전 상태와 현재 상태가 다르면...
-  {
-    delay(5);         // 5ms 대기
-    current = digitalRead(BUTTON_PIN);  // 버튼 상태 다시 읽기
-  }
-  return current;       // 버튼의 현재 상태 반환
 }
