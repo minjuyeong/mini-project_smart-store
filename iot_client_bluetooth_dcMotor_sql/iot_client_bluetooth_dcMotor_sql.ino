@@ -136,14 +136,6 @@ void bluetoothEvent()
   {
     return ;
   }
-   
-  if()
-  {
-    sprintf(sendBuf,"[%s]DHTSTATE\n","StoreA",);
-    client.write(sendBuf, strlen(sendBuf));
-    client.flush();
-  }
-  
   else 
   { 
     return;
