@@ -58,7 +58,12 @@ void setup()
 void loop()
 {
   inputvalue = keypad.getKey();
-  if(storename == '\0' && inputvalue != NULL)
+  if(inputvalue == 'A' || inputvalue == 'B' || inputvalue == 'C' || inputvalue == 'D')
+  {
+    storename = inputvalue;
+    send();
+  }
+  else if(storename == '\0' && inputvalue != NULL)
   {
       keypadInput();
   }
@@ -154,7 +159,7 @@ void send()
   */
   char sendBuffer[MSG_SIZE]={0}; 
 
-  if (stopFlag)
+  if (!stopFlag)
   {
     sprintf(sendBuffer, "[%s]STATE", storename);
   }
@@ -213,10 +218,21 @@ void lcd_update()
   sprintf(lcdBuffer1, "%2.1f`C led:%d   ", temp, ledState);
   sprintf(lcdBuffer2, "%s h:%d f:%d  ", lockState ? "lock" : "open", humanCount, fanPwm);
 
+  lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print(lcdBuffer1);
-  lcd.setCursor(1, 0);
+  lcd.setCursor(0, 1);
   lcd.print(lcdBuffer2);
+  while(1)
+  {
+    char a = keypad.getKey();
+    if(a)
+    {
+      storename = 0;
+      lcd.clear();
+      return;
+    }
+  }
 }
 
 void timerIsr() {
