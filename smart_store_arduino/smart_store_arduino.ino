@@ -27,7 +27,7 @@ Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 String password = "1234";
 String input = "";
 
-char storename;
+char storename = '\0';
 char inputvalue;
 
 float temp; //온도
@@ -41,6 +41,8 @@ int stopFlag = 0;   //ALLOFF 명령어 보낼지 여부, send함수에서 사용
 
 SoftwareSerial BTSerial(10, 11);
 
+volatile bool doUpdate = false;
+
 void setup()
 {
   #ifdef DEBUG
@@ -49,22 +51,20 @@ void setup()
 #endif
   lcd_init(); //lcd 초기화 밑, 초기화면 설정
   BTSerial.begin(9600); //블루투스 설정
-  // MsTimer2::set(1000, timerIsr); // 타이머 설정
-  // MsTimer2::start();
+  MsTimer2::set(1000, timerIsr); // 타이머 설정
+  MsTimer2::start();
 }
 
 void loop()
 {
   inputvalue = keypad.getKey();
-  if(inputvalue != NULL)
+  if(storename == '\0' && inputvalue != NULL)
   {
-    keypadInput();
+      keypadInput();
   }
-
   //타이머 인터럽트 1초마다 store_name 확인 후 동작하기
-  else if(BTSerial.available() && strcmp(storename, NULL) != 0)
-  {
-    Serial.print("2");
+  else if (doUpdate && storename != '\0') {
+    doUpdate = false;  // clear flag
     send();
     recv();
     lcd_update();
@@ -86,6 +86,8 @@ void keypadInput()
 {
   char abc[30] = {0};
   char prevKey = NO_KEY;
+  storename = 0;
+  input = "";
   lcd.setCursor(0, 0);
   lcd.print("passward :      ");
   while (1) {
@@ -105,24 +107,25 @@ void keypadInput()
         do {
         storename = keypad.getKey();
         } while (storename == NO_KEY);
-        if (!(storename == 'A' || storename == 'B' || storename == 'C' || storename == 'D'))
-        {
-          lcd.clear();
-          lcd.print("reselect store");
-        } 
-        else
-        {
+        if (storename == 'A' || storename == 'B' || storename == 'C' || storename == 'D') {
           stopFlag = 1;
           sprintf(abc,"%c store", storename);
           lcd.setCursor(0, 1);
           lcd.print(abc);
+          return; // 성공 시 탈출
+        } else {
+          lcd.clear();
+          lcd.print("reselect store");
+          delay(2000);
+          lcd.clear();
+          return;
         }
-        return;
       } else {
         lcd.print("That's Wrong !  ");
-        lcd.print("                ");
+        delay(2000);
+        lcd.clear();
+        return;
       }
-      delay(2000);
     } else if (key == '*') {  // 입력 초기화
       input = "";
       lcd.setCursor(0, 1);
@@ -158,7 +161,7 @@ void send()
   else
     sprintf(sendBuffer, "[%s]ALLSTOP", storename);
 
-  BTSerial.write(sendBuffer);
+  BTSerial.write(sendBuffer, strlen(sendBuffer));
 }
 
 void recv()
@@ -214,4 +217,8 @@ void lcd_update()
   lcd.print(lcdBuffer1);
   lcd.setCursor(1, 0);
   lcd.print(lcdBuffer2);
+}
+
+void timerIsr() {
+  doUpdate = true;
 }
