@@ -1,8 +1,13 @@
-q#include <SoftwareSerial.h>
+#include <SoftwareSerial.h>
 #include <Wire.h>
 #include <MsTimer2.h>
-
+#include <Keypad.h>
+#include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+#define MSG_SIZE 60 //송수신하는 패킷 사이즈
+#define pArray_CNT 15 //명령어의 사이즈
+
 // 키패드 설정
 const byte ROWS = 4; 
 const byte COLS = 4;
@@ -21,21 +26,32 @@ Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 String password = "1234";
 String input = "";
 
+char store_name;
+
+float temp; //온도
+float humi; //습도
+int lockState;  //잠금상태  1이면 잠금 0이면 열림
+int ledState; //led 밝기
+int humanCount; //매장 내 고객 수
+int fanPwm; //실링팬 회전 상태
+
 int stopFlag = 0;   //ALLOFF 명령어 보낼지 여부, send함수에서 사용
+
+SoftwareSerial BTSerial(10, 11);
 
 void setup()
 {
   lcd_init(); //lcd 초기화 밑, 초기화면 설정
   BTSerial.begin(9600); //블루투스 설정
-  MsTimer2::set(1000, timerIsr); // 타이머 설정
-  MsTimer2::start();
+  // MsTimer2::set(1000, timerIsr); // 타이머 설정
+  // MsTimer2::start();
 }
 
 void loop()
 {
-  if(getkey() != NULL)
+  if(keypad.getKey() != NULL)
   {
-    keypad();
+    keypadInput();
   }
 
   //타이머 인터럽트 1초마다 store_name 확인 후 동작하기
@@ -43,6 +59,7 @@ void loop()
   {
     send();
     recv();
+    lcd_update();
   }
   else
   {
@@ -54,11 +71,10 @@ void lcd_init()
 {
   lcd.init();
   lcd.backlight();
-  lcdDisplay(0, 0, lcdLine1);
-  lcdDisplay(0, 1, lcdLine2);
+  lcd.clear();
 }
 
-void keypad()
+void keypadInput()
 {
   char key = keypad.getKey();
   
@@ -72,10 +88,10 @@ void keypad()
         lcd.setCursor(0, 0);
         lcd.print("select store");
 
-        char storename = keypad.getkey(); //store A, B, C, D, allstop을 위한 구조
+        char storename = keypad.getKey(); //store A, B, C, D, allstop을 위한 구조
         if (storename != 'A' || storename != 'B' || storename != 'C' || storename != 'D')
         {
-          lcd.clean();
+          lcd.clear();
           lcd.print("reselect store");
         } 
         else
@@ -102,7 +118,7 @@ void keypad()
   }
 }
 
-void send())
+void send()
 {
   /*
   if (stopFlag)
@@ -111,6 +127,16 @@ void send())
   else
     ALLSTOP
   */
+  char sendBuffer[MSG_SIZE]={0}; 
+
+  if (stopFlag)
+  {
+    sprintf(sendBuffer, "[%s]StoreState", store_name);
+  }
+  else
+    sprintf(sendBuffer, "[%s]ALLSTOP", store_name);
+
+  BTSerial.write(sendBuffer);
 }
 
 void recv()
@@ -119,17 +145,48 @@ void recv()
   [storename]온도@습도@led@lock@humanCount@FANPWM
   -> strtok() 이후로 lcd_update()
   */
+  
+  int i = 0;
+  char * pToken;
+  char * pArray[pArray_CNT] = {0};
+  char recvBuffer[MSG_SIZE] = {0};
+  int len = BTSerial.readBytesUntil('\n', recvBuffer, sizeof(recvBuffer) - 1);
+  
+  pToken = strtok(recvBuffer, "[@]");
+  while (pToken != NULL)
+  {
+    pArray[i] =  pToken;
+    if (++i >= pArray_CNT)
+      break;
+    pToken = strtok(NULL, "[@]");
+  }
+  if(!strcmp(pArray[0], "STORENAME"))
+  {
+    temp = atoi(pArray[1]);
+    humi = atoi(pArray[2]);
+    lockState = pArray[3];
+    ledState = pArray[4];
+    humanCount = pArray[5]; //매장 내 고객 수
+    fanPwm = pArray[6]; //실링팬 회전 상태
+  }
 }
 
 void lcd_clock()
 {
-  lcd.print("clock display");
+  //lcd.print("clock display");
 }
 
-void lcd_uddate()
+void lcd_update()
 {
+  char lcdBuffer1[16]={0};
+  char lcdBuffer2[16]={0};
     /*
   [storename]온도@습도@led@lock@humanCount@FANPWM
   -> strtok() 이후로 lcd_update()
-  */
+  */  
+  sprintf(lcdBuffer1, "%2.1f`C %2.1f%% led:%d", temp, humi, ledState);
+  sprintf(lcdBuffer2, "%s human:%d fan:%d", lockState ? "lock" : "open", humanCount, fanPwm);
+
+  lcd.setCursor(0, 0, lcdBuffer1);
+  lcd.setCursor(1, 0, lcdBuffer2);
 }
