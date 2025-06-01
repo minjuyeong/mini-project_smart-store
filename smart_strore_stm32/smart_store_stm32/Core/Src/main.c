@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "esp.h"
 #include "dht.h"
 //#include "clcd.h"
@@ -54,6 +55,7 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim4;
 
@@ -67,8 +69,21 @@ extern volatile unsigned char rx2Flag;
 extern volatile char rx2Data[50];
 volatile int tim3Flag1Sec=1;
 volatile unsigned int tim3Sec;
-volatile int keyNo;
-int rgbFlag;
+
+char storeName = 'A';	//현재 장치의 매장명
+
+//각 장치의 데이터 저장
+int humi; //습도, 정수로만
+char temp[10];	//온도는, 소수점 앞뒤로 따로 저장되므로 문자열로 한번에 저장
+int customerCount = 0;	//현재 매장 내 손님 수 저장(인체감지 센서)
+int ledState;	//led(조명의 밝기) 저장
+int fanSpeed=0;	//ez모터의 회전수 저장	//0~1000
+bool lockState;	//true면 lock faluse 면 off
+
+//각 장치의 작동 가능 플래그, 각 플래그들이 true면 값을 수정할 수 있다.
+//allstop 명
+bool fanFlag = false;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -76,14 +91,18 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_USART6_UART_Init(void);
-static void MX_TIM3_Init(void);
 static void MX_TIM4_Init(void);
+static void MX_TIM3_Init(void);
+static void MX_TIM1_Init(void);
 /* USER CODE BEGIN PFP */
 char strBuff[MAX_ESP_COMMAND_LEN];
 void MX_GPIO_LED_ON(int flag);
 void MX_GPIO_LED_OFF(int flag);
 void esp_event(char *);
 long map(long x, long in_min, long in_max, long out_min, long out_max);
+
+void fanControl(int fanSpeed);	//fan 회전수를 변경하는 함수
+void ledControl(int ledState);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -101,8 +120,6 @@ int main(void)
   /* USER CODE BEGIN 1 */
 	int ret = 0;
 	DHT11_TypeDef dht11Data;
-	char buff[30];
-	int pluse = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -125,8 +142,9 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   MX_USART6_UART_Init();
-  MX_TIM3_Init();
   MX_TIM4_Init();
+  MX_TIM3_Init();
+  MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
   printf("Start main() - wifi\r\n");
   ret |= drv_uart_init();
@@ -141,16 +159,14 @@ int main(void)
 
   DHT11_Init();
 
-  if(HAL_TIM_Base_Start_IT(&htim3) != HAL_OK)
-  {
+  if(HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1) != HAL_OK)
 	  Error_Handler();
-  }
-  if(HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1) != HAL_OK)
-  {
-	  Error_Handler();
-  }
-  __HAL_TIM_SetCompare(&htim4,TIM_CHANNEL_1,(pluse-1)<0?0:pluse-1);
 
+  if(HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1) != HAL_OK)
+	  Error_Handler();
+
+  if(HAL_TIM_PWM_Start(&htim4,TIM_CHANNEL_1) != HAL_OK)
+	  Error_Handler();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -181,14 +197,17 @@ int main(void)
 					esp_client_conn();
 				}
 			}
-//			printf("tim3Sec : %d\r\n",tim3Sec);
+			printf("tim3Sec : %d\r\n",tim3Sec);
 			if(!(tim3Sec%5)) //5초에 한번
 			{
+				//dht11에서 값 읽어오기
 				dht11Data = DHT11_readData();
 				if(dht11Data.rh_byte1 != 255)
 				{
-					sprintf(buff,"h: %d%% t: %d.%d'C", dht11Data.rh_byte1, dht11Data.temp_byte1, dht11Data.temp_byte2);
-					printf("%s\r\n", buff);
+					//온도 데이터 전역변수 temp에 저장
+					sprintf(temp, "%d.%d", dht11Data.temp_byte1, dht11Data.temp_byte2);
+					//습도 데이터 전역변수 humi 에 저장
+					humi = dht11Data.rh_byte1;
 				}
 				else
 					printf("DHT11 response error\r\n");
@@ -219,7 +238,7 @@ void SystemClock_Config(void)
   * in the RCC_OscInitTypeDef structure.
   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.HSEState = RCC_HSE_BYPASS;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 8;
@@ -247,6 +266,81 @@ void SystemClock_Config(void)
 }
 
 /**
+  * @brief TIM1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM1_Init(void)
+{
+
+  /* USER CODE BEGIN TIM1_Init 0 */
+
+  /* USER CODE END TIM1_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
+  TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
+
+  /* USER CODE BEGIN TIM1_Init 1 */
+
+  /* USER CODE END TIM1_Init 1 */
+  htim1.Instance = TIM1;
+  htim1.Init.Prescaler = 84-1;
+  htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim1.Init.Period = 999;
+  htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim1.Init.RepetitionCounter = 0;
+  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim1, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_PWM_Init(&htim1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 0;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
+  sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
+  if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
+  sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
+  sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
+  sBreakDeadTimeConfig.DeadTime = 0;
+  sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
+  sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
+  sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
+  if (HAL_TIMEx_ConfigBreakDeadTime(&htim1, &sBreakDeadTimeConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM1_Init 2 */
+
+  /* USER CODE END TIM1_Init 2 */
+  HAL_TIM_MspPostInit(&htim1);
+
+}
+
+/**
   * @brief TIM3 Initialization Function
   * @param None
   * @retval None
@@ -260,6 +354,7 @@ static void MX_TIM3_Init(void)
 
   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
 
   /* USER CODE BEGIN TIM3_Init 1 */
 
@@ -279,15 +374,28 @@ static void MX_TIM3_Init(void)
   {
     Error_Handler();
   }
+  if (HAL_TIM_PWM_Init(&htim3) != HAL_OK)
+  {
+    Error_Handler();
+  }
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
   if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
   {
     Error_Handler();
   }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 0;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  {
+    Error_Handler();
+  }
   /* USER CODE BEGIN TIM3_Init 2 */
 
   /* USER CODE END TIM3_Init 2 */
+  HAL_TIM_MspPostInit(&htim3);
 
 }
 
@@ -313,9 +421,9 @@ static void MX_TIM4_Init(void)
   htim4.Instance = TIM4;
   htim4.Init.Prescaler = 84-1;
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim4.Init.Period = 20000-1;
+  htim4.Init.Period = 1000-1;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
   {
     Error_Handler();
@@ -504,24 +612,43 @@ void esp_event(char * recvBuf)
     pToken = strtok(NULL,"[@]");
   }
 
-  if(!strcmp(pArray[1],"LED"))
+  if(!strcmp(pArray[1], "ALLSTOP"))
   {
-  	if(!strcmp(pArray[2],"ON"))
-  	{
-  		MX_GPIO_LED_ON(LD2_Pin);
-  	}
-	else if(!strcmp(pArray[2],"OFF"))
-	{
-		MX_GPIO_LED_OFF(LD2_Pin);
-	}
-	sprintf(sendBuf,"[%s]%s@%s\n",pArray[0],pArray[1],pArray[2]);
+	  if(!strcmp(pArray[2], "ON"))
+	  {
+		  //모든 장치 정지 명령 내리기(모든 플래그 True로)
+	  }
+	  else if(!strcmp(pArray[2], "OFF"))
+	  {
+		  //모든 장치 정지 명령 취소(모든 플래그 false로)
+	  }
   }
-  else if(!strcmp(pArray[1],"SERVO"))
+  else if(!strcmp(pArray[1], "STATE"))
   {
-	int value = atoi(pArray[2]);
-	value = map(value, 0, 180, 500, 2500);
-	__HAL_TIM_SetCompare(&htim4,TIM_CHANNEL_1,(value-1)<0?0:value-1);
-	sprintf(sendBuf,"[%s]%s@%s\n",pArray[0],pArray[1],pArray[2]);
+	  //현재 매장의 상태 전송하기
+	 sprintf(sendBuf, "[%s]%s@%s@%d@%d@%d@%d@%d\n", pArray[0], pArray[1], temp, humi, ledState, lockState, customerCount, fanSpeed);
+  }
+  else if(!strcmp(pArray[1], "FAN"))	//팬 회전수 0~1000
+  {
+	  fanSpeed = atoi(pArray[2]);
+	  fanControl(fanSpeed);
+	  sprintf(sendBuf, "[%s]%s@%d\n", pArray[0], pArray[1], fanSpeed);
+  }
+  else if(!strcmp(pArray[1], "DHTSTATE"))	//온습도 보내기
+  {
+	  sprintf(sendBuf, "[%s]%s@%s@%d\n", pArray[0], pArray[1], temp, humi);
+  }
+  else if(!strcmp(pArray[1], "LED"))	//[매장명]LED@pArray[2]or[State]@
+  {
+	  if(!strcmp(pArray[2], "STATE"))
+	  {
+		  sprintf(sendBuf, "[%s]%s@%s@%d\n", pArray[0], pArray[1], pArray[2], ledState);
+	  }
+	  else
+	  {
+		  ledControl(atoi(pArray[2]));
+		  sprintf(sendBuf, "[%s]%s@%d\n", pArray[0], pArray[1], atoi(pArray[2]));
+	  }
   }
   else if(!strncmp(pArray[1]," New conn",8))
   {
@@ -538,7 +665,7 @@ void esp_event(char * recvBuf)
       return;
 
   esp_send_data(sendBuf);
-  printf("Debug send : %s\r\n",sendBuf);
+//  printf("Debug send : %s\r\n",sendBuf);
 }
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)		//1ms 마다 호출
 {
@@ -551,22 +678,24 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)		//1ms 마다 호출
 		tim3Cnt = 0;
 	}
 }
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-//	printf("EXTI %d\r\n",GPIO_Pin);
-	switch(GPIO_Pin)
-	{
-		case GPIO_PIN_0:
-			keyNo = 1;
-			break;
-		case GPIO_PIN_13:
-			keyNo = 2;
-			break;
-	}
-}
 
 long map(long x, long in_min, long in_max, long out_min, long out_max) {
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
+void fanControl(int fanSpeed)
+{
+	if (!fanFlag)	//플래그들은 0일 때만 동작을 의미함.
+	{
+		__HAL_TIM_SetCompare(&htim4,TIM_CHANNEL_1, fanSpeed);
+	}
+}
+
+void ledControl(int bright)
+{
+	ledState = bright;	//전역변수에 저장
+	int realLedState = map(bright, 0, 100, 0, 1000);	//써지는 실제값
+	__HAL_TIM_SetCompare(&htim1,TIM_CHANNEL_1, realLedState);
 }
 /* USER CODE END 4 */
 
