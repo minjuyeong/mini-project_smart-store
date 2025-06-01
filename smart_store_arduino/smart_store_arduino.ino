@@ -8,7 +8,7 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 #define MSG_SIZE 60 //송수신하는 패킷 사이즈
 #define pArray_CNT 15 //명령어의 사이즈
 #define DEBUG
-char recvId[10] = "MJY_LIN";  // SQL 저장 클라이이언트 ID
+char recvId[10] = "KJH_LIN";  // SQL 저장 클라이이언트 ID
 // 키패드 설정
 const byte ROWS = 4; 
 const byte COLS = 4;
