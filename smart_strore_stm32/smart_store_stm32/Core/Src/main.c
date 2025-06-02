@@ -25,6 +25,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <math.h>
 #include "esp.h"
 #include "dht.h"
 //#include "clcd.h"
@@ -37,13 +38,6 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-//#ifdef __GNUC__
-///* With GCC, small printf (option LD Linker->Libraries->Small printf
-//   set to 'Yes') calls __io_putchar() */
-//#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
-//#else
-//#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
-//#endif /* __GNUC__ */
 #define ARR_CNT 5
 #define CMD_SIZE 50
 
@@ -55,7 +49,10 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc1;
+
 TIM_HandleTypeDef htim1;
+TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim4;
 
@@ -70,8 +67,6 @@ extern volatile char rx2Data[50];
 volatile int tim3Flag1Sec=1;
 volatile unsigned int tim3Sec;
 
-char storeName = 'A';	//현재 장치의 매장명
-
 //각 장치의 데이터 저장
 int humi; //습도, 정수로만
 char temp[10];	//온도는, 소수점 앞뒤로 따로 저장되므로 문자열로 한번에 저장
@@ -84,6 +79,12 @@ bool lockState;	//true면 lock faluse 면 off
 //allstop 명
 bool fanFlag = false;
 
+//초음파 센서 관련 변수
+uint32_t IC_Val1 = 0;
+uint32_t IC_Val2 = 0;
+uint32_t Difference = 0;
+uint8_t Is_First_Captured = 0;  // is the first value captured ?
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -94,6 +95,8 @@ static void MX_USART6_UART_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_TIM1_Init(void);
+static void MX_ADC1_Init(void);
+static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 char strBuff[MAX_ESP_COMMAND_LEN];
 void MX_GPIO_LED_ON(int flag);
@@ -103,6 +106,11 @@ long map(long x, long in_min, long in_max, long out_min, long out_max);
 
 void fanControl(int fanSpeed);	//fan 회전수를 변경하는 함수
 void ledControl(int ledState);
+
+int infraredSensor();	//적외선 센서 데이터
+
+uint32_t Read_ADC_Channel(uint32_t channel);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -145,6 +153,8 @@ int main(void)
   MX_TIM4_Init();
   MX_TIM3_Init();
   MX_TIM1_Init();
+  MX_ADC1_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
   printf("Start main() - wifi\r\n");
   ret |= drv_uart_init();
@@ -167,12 +177,15 @@ int main(void)
 
   if(HAL_TIM_PWM_Start(&htim4,TIM_CHANNEL_1) != HAL_OK)
 	  Error_Handler();
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	    int infraredSensorData = infraredSensor();	//출입문 적외선센서 값
+
 		if(strstr((char *)cb_data.buf,"+IPD") && cb_data.buf[cb_data.length-1] == '\n')
 		{
 			//?��?��?���??  \r\n+IPD,15:[KSH_LIN]HELLO\n
@@ -213,11 +226,22 @@ int main(void)
 					printf("DHT11 response error\r\n");
 			}
 		}
-		// 자동문열기
-		//먼저 센서 값 읽어서 저장하기
-/*
 
- */
+		// 자동문열기
+		if(infraredSensorData == 10)	//문열기 코드 10
+		{
+			//문 열기 코드
+		}
+
+		//손님 수 카운트 코드
+		if(infraredSensorData == 20)	//손님 수 감소 코드 20
+		{
+			customerCount--;
+		}
+		else if(infraredSensorData == 30)	//손님 수 증가 코드 30
+		{
+			customerCount++;
+		}
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -268,6 +292,64 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief ADC1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_ADC1_Init(void)
+{
+
+  /* USER CODE BEGIN ADC1_Init 0 */
+
+  /* USER CODE END ADC1_Init 0 */
+
+  ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN ADC1_Init 1 */
+
+  /* USER CODE END ADC1_Init 1 */
+
+  /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
+  */
+  hadc1.Instance = ADC1;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
+  hadc1.Init.ScanConvMode = DISABLE;
+  hadc1.Init.ContinuousConvMode = DISABLE;
+  hadc1.Init.DiscontinuousConvMode = DISABLE;
+  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc1.Init.NbrOfConversion = 1;
+  hadc1.Init.DMAContinuousRequests = DISABLE;
+  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  if (HAL_ADC_Init(&hadc1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_1;
+  sConfig.Rank = 1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC1_Init 2 */
+  sConfig.Channel = ADC_CHANNEL_2;
+  sConfig.Rank = 1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE END ADC1_Init 2 */
+
 }
 
 /**
@@ -342,6 +424,65 @@ static void MX_TIM1_Init(void)
 
   /* USER CODE END TIM1_Init 2 */
   HAL_TIM_MspPostInit(&htim1);
+
+}
+
+/**
+  * @brief TIM2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM2_Init(void)
+{
+
+  /* USER CODE BEGIN TIM2_Init 0 */
+
+  /* USER CODE END TIM2_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
+
+  /* USER CODE BEGIN TIM2_Init 1 */
+
+  /* USER CODE END TIM2_Init 1 */
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 84-1;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 20000-1;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 500-1;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM2_Init 2 */
+
+  /* USER CODE END TIM2_Init 2 */
+  HAL_TIM_MspPostInit(&htim2);
 
 }
 
@@ -590,14 +731,6 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-//PUTCHAR_PROTOTYPE
-//{
-//  /* Place your implementation of fputc here */
-//  /* e.g. write a character to the USART6 and Loop until the end of transmission */
-//  HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 0xFFFF);
-//
-//  return ch;
-//}
 void MX_GPIO_LED_ON(int pin)
 {
 	HAL_GPIO_WritePin(LD2_GPIO_Port, pin, GPIO_PIN_SET);
@@ -709,6 +842,93 @@ void ledControl(int bright)
 	ledState = bright;	//전역변수에 저장
 	int realLedState = map(bright, 0, 100, 0, 1000);	//써지는 실제값
 	__HAL_TIM_SetCompare(&htim1,TIM_CHANNEL_1, realLedState);
+}
+
+int infraredSensor(void)
+{
+  typedef struct
+  {
+	  float distance;
+	  uint32_t sensorReadTime;
+  } Data;
+
+  Data outDoorSensor = {0.0, 0};
+  Data inDoorSensor  = {0.0, 0};
+
+//  //adc chennel1 시작
+//  HAL_ADC_Start(&hadc1);
+//
+//  // adc chennel1 변환 완료 대기
+//  HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
+//
+//  // adc chennel1 값 읽기
+//  uint32_t adcValue = HAL_ADC_GetValue(&hadc1);
+//  outDoorSensor.sensorReadTime = HAL_GetTick();
+//
+//  // adc chennel1 값을 전압으로 변환
+//  float voltage = (adcValue / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
+//
+//  // outDoorSensor 거리 계산 (센서의 특성에 따라 조정)
+//  outDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
+//
+//
+//  //adc chennel2 시작, 스캔 모드에 의해 자동으로 전환
+//  HAL_ADC_Start(&hadc1);
+//
+//  // adc chennel2 변환 완료 대기
+//  HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
+//
+//  // adc chennel2 값 읽기
+//  adcValue = HAL_ADC_GetValue(&hadc1);
+//  inDoorSensor.sensorReadTime = HAL_GetTick();
+//
+//  // adc chennel2 값을 전압으로 변환
+//  voltage = (adcValue / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
+//
+//  // inDoorSensor 거리 계산 (센서의 특성에 따라 조정)
+//  inDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
+
+   uint32_t adcValue = Read_ADC_Channel(ADC_CHANNEL_0);
+   outDoorSensor.sensorReadTime = HAL_GetTick();
+   // adc chennel1 값을 전압으로 변환
+   float voltage = (adcValue / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
+
+   // outDoorSensor 거리 계산 (센서의 특성에 따라 조정)
+   outDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
+
+   adcValue = Read_ADC_Channel(ADC_CHANNEL_1);
+   inDoorSensor.sensorReadTime = HAL_GetTick();
+   // adc chennel1 값을 전압으로 변환
+   voltage = (adcValue / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
+
+   // outDoorSensor 거리 계산 (센서의 특성에 따라 조정)
+   inDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
+
+  if(outDoorSensor.distance < 30 || inDoorSensor.distance < 30)
+  {
+	  return 10;	//문열림 코드 10
+  }
+  else if(outDoorSensor.sensorReadTime > inDoorSensor.sensorReadTime)
+  {
+	  return 20;	//손님 수 줄어듬 코드 20
+  }
+  else if(inDoorSensor.sensorReadTime > outDoorSensor.sensorReadTime)
+  {
+	  return 30; 	//손님 수 증가 코드 30
+  }
+}
+
+uint32_t Read_ADC_Channel(uint32_t channel) {
+    ADC_ChannelConfTypeDef sConfig = {0};
+
+    sConfig.Channel = channel;
+    sConfig.Rank = 1;
+    sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES; // 샘플링 시간 설정
+    HAL_ADC_ConfigChannel(&hadc1, &sConfig);
+
+    HAL_ADC_Start(&hadc1); // ADC 변환 시작
+    HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY); // 변환 완료 대기
+    return HAL_ADC_GetValue(&hadc1); // 변환된 값 반환
 }
 /* USER CODE END 4 */
 

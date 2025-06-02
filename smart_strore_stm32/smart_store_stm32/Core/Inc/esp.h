@@ -13,7 +13,7 @@
 
 #define SSID "embA"
 #define PASS "embA1234"
-#define LOGID "A"
+#define LOGID "asdfsa"
 #define PASSWD "PASSWD"
 #define DST_IP "10.10.141.68"
 #define DST_PORT 5000

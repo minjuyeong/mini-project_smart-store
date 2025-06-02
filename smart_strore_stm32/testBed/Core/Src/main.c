@@ -49,6 +49,8 @@
 /* Private variables ---------------------------------------------------------*/
 ADC_HandleTypeDef hadc1;
 
+TIM_HandleTypeDef htim2;
+
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
@@ -60,8 +62,9 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_ADC1_Init(void);
+static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
-void stepMotor(int step);
+//void stepMotor(int step);
 void rotateMotor(int steps);
 /* USER CODE END PFP */
 
@@ -101,6 +104,7 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   MX_ADC1_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
   /* USER CODE END 2 */
 
@@ -126,10 +130,10 @@ int main(void)
 
 	  // 거리 값 출력 (예: UART, LCD 등으로 출력 가능)
 	  printf("red : %f\r\n", distance);
-	  HAL_Delay(1000); // 500ms 대
+//	  HAL_Delay(1000); // 500ms 대
 #endif
 	//초음파 센서
-#if 1 //초음파센서
+#if 0 //초음파센서
 	  // TRIG 핀을 LOW로 설정
 	  HAL_GPIO_WritePin(TRIG_OUTPUT_GPIO_Port, TRIG_OUTPUT_Pin, GPIO_PIN_RESET);
 	  HAL_Delay(2);
@@ -152,17 +156,20 @@ int main(void)
 	  }
 
 	  // 거리 계산 (cm)
-	  float sonic_distance = (343.0f * travelTime) / 2000.0f;
+	  float sonic_distance = ((0.034f * travelTime*1000) / 2.0f);
+
 
 	  // 거리 출력 (UART 또는 LCD 등으로 출력 가능)
 	  // 예: HAL_UART_Transmit(&huart1, (uint8_t*)&distance, sizeof(distance), HAL_MAX_DELAY);
 	  printf("u_sonic : %f\r\n", sonic_distance);
-	  HAL_Delay(1000); // 1초 대기
 #endif
-	 rotateMotor(512); // 512 스텝 회전 (한 바퀴)
-	 HAL_Delay(1000); // 1초 대기
-	 rotateMotor(-512); // 반대 방향으로 512 스텝 회전
-	 HAL_Delay(1000); // 1초 대기
+//	 rotateMotor(512); // 512 스텝 회전 (한 바퀴)
+//	 HAL_Delay(1000); // 1초 대기
+//	 rotateMotor(-512); // 반대 방향으로 512 스텝 회전
+//	 HAL_Delay(1000); // 1초 대기
+
+	  int pluse = 2500;
+	  __HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_1, pluse -1);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -265,6 +272,65 @@ static void MX_ADC1_Init(void)
   /* USER CODE BEGIN ADC1_Init 2 */
 
   /* USER CODE END ADC1_Init 2 */
+
+}
+
+/**
+  * @brief TIM2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM2_Init(void)
+{
+
+  /* USER CODE BEGIN TIM2_Init 0 */
+
+  /* USER CODE END TIM2_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
+
+  /* USER CODE BEGIN TIM2_Init 1 */
+
+  /* USER CODE END TIM2_Init 1 */
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 84-1;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 20000-1;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 500-1;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM2_Init 2 */
+
+  /* USER CODE END TIM2_Init 2 */
+  HAL_TIM_MspPostInit(&htim2);
 
 }
 
@@ -375,43 +441,43 @@ PUTCHAR_PROTOTYPE
 
   return ch;
 }
-void stepMotor(int step) {
-    switch (step) {
-        case 0:
-            HAL_GPIO_WritePin(GPIOB, IN1_Pin, GPIO_PIN_SET);
-            HAL_GPIO_WritePin(GPIOB, IN2_Pin, GPIO_PIN_RESET);
-            HAL_GPIO_WritePin(GPIOB, IN3_Pin, GPIO_PIN_RESET);
-            HAL_GPIO_WritePin(GPIOB, IN4_Pin, GPIO_PIN_RESET);
-            break;
-        case 1:
-            HAL_GPIO_WritePin(GPIOB, IN1_Pin, GPIO_PIN_RESET);
-            HAL_GPIO_WritePin(GPIOB, IN2_Pin, GPIO_PIN_SET);
-            HAL_GPIO_WritePin(GPIOB, IN3_Pin, GPIO_PIN_RESET);
-            HAL_GPIO_WritePin(GPIOB, IN4_Pin, GPIO_PIN_RESET);
-            break;
-        case 2:
-            HAL_GPIO_WritePin(GPIOB, IN1_Pin, GPIO_PIN_RESET);
-            HAL_GPIO_WritePin(GPIOB, IN2_Pin, GPIO_PIN_RESET);
-            HAL_GPIO_WritePin(GPIOB, IN3_Pin, GPIO_PIN_SET);
-            HAL_GPIO_WritePin(GPIOB, IN4_Pin, GPIO_PIN_RESET);
-            break;
-        case 3:
-            HAL_GPIO_WritePin(GPIOB, IN1_Pin, GPIO_PIN_RESET);
-            HAL_GPIO_WritePin(GPIOB, IN2_Pin, GPIO_PIN_RESET);
-            HAL_GPIO_WritePin(GPIOB, IN3_Pin, GPIO_PIN_RESET);
-            HAL_GPIO_WritePin(GPIOB, IN4_Pin, GPIO_PIN_SET);
-            break;
-    }
-}
-
-void rotateMotor(int steps) {
-    for (int i = 0; i < steps; i++) {
-        for (int j = 0; j < 4; j++) {
-            stepMotor(j);
-            HAL_Delay(1); // 스텝 간의 지연 시간
-        }
-    }
-}
+//void stepMotor(int step) {
+//    switch (step) {
+//        case 0:
+//            HAL_GPIO_WritePin(GPIOB, IN1_Pin, GPIO_PIN_SET);
+//            HAL_GPIO_WritePin(GPIOB, IN2_Pin, GPIO_PIN_RESET);
+//            HAL_GPIO_WritePin(GPIOB, IN3_Pin, GPIO_PIN_RESET);
+//            HAL_GPIO_WritePin(GPIOB, IN4_Pin, GPIO_PIN_RESET);
+//            break;
+//        case 1:
+//            HAL_GPIO_WritePin(GPIOB, IN1_Pin, GPIO_PIN_RESET);
+//            HAL_GPIO_WritePin(GPIOB, IN2_Pin, GPIO_PIN_SET);
+//            HAL_GPIO_WritePin(GPIOB, IN3_Pin, GPIO_PIN_RESET);
+//            HAL_GPIO_WritePin(GPIOB, IN4_Pin, GPIO_PIN_RESET);
+//            break;
+//        case 2:
+//            HAL_GPIO_WritePin(GPIOB, IN1_Pin, GPIO_PIN_RESET);
+//            HAL_GPIO_WritePin(GPIOB, IN2_Pin, GPIO_PIN_RESET);
+//            HAL_GPIO_WritePin(GPIOB, IN3_Pin, GPIO_PIN_SET);
+//            HAL_GPIO_WritePin(GPIOB, IN4_Pin, GPIO_PIN_RESET);
+//            break;
+//        case 3:
+//            HAL_GPIO_WritePin(GPIOB, IN1_Pin, GPIO_PIN_RESET);
+//            HAL_GPIO_WritePin(GPIOB, IN2_Pin, GPIO_PIN_RESET);
+//            HAL_GPIO_WritePin(GPIOB, IN3_Pin, GPIO_PIN_RESET);
+//            HAL_GPIO_WritePin(GPIOB, IN4_Pin, GPIO_PIN_SET);
+//            break;
+//    }
+//}
+//
+//void rotateMotor(int steps) {
+//    for (int i = 0; i < steps; i++) {
+//        for (int j = 0; j < 4; j++) {
+//            stepMotor(j);
+//            HAL_Delay(1); // 스텝 간의 지연 시간
+//        }
+//    }
+//}
 /* USER CODE END 4 */
 
 /**
