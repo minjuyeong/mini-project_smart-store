@@ -855,39 +855,6 @@ int infraredSensor(void)
   Data outDoorSensor = {0.0, 0};
   Data inDoorSensor  = {0.0, 0};
 
-//  //adc chennel1 시작
-//  HAL_ADC_Start(&hadc1);
-//
-//  // adc chennel1 변환 완료 대기
-//  HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
-//
-//  // adc chennel1 값 읽기
-//  uint32_t adcValue = HAL_ADC_GetValue(&hadc1);
-//  outDoorSensor.sensorReadTime = HAL_GetTick();
-//
-//  // adc chennel1 값을 전압으로 변환
-//  float voltage = (adcValue / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
-//
-//  // outDoorSensor 거리 계산 (센서의 특성에 따라 조정)
-//  outDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
-//
-//
-//  //adc chennel2 시작, 스캔 모드에 의해 자동으로 전환
-//  HAL_ADC_Start(&hadc1);
-//
-//  // adc chennel2 변환 완료 대기
-//  HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
-//
-//  // adc chennel2 값 읽기
-//  adcValue = HAL_ADC_GetValue(&hadc1);
-//  inDoorSensor.sensorReadTime = HAL_GetTick();
-//
-//  // adc chennel2 값을 전압으로 변환
-//  voltage = (adcValue / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
-//
-//  // inDoorSensor 거리 계산 (센서의 특성에 따라 조정)
-//  inDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
-
    uint32_t adcValue = Read_ADC_Channel(ADC_CHANNEL_0);
    outDoorSensor.sensorReadTime = HAL_GetTick();
    // adc chennel1 값을 전압으로 변환
