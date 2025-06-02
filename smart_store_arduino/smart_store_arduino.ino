@@ -9,16 +9,9 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 #define MSG_SIZE 60
 #define pArray_CNT 15
 #define DEBUG
-<<<<<<< HEAD
-char recvId[10] = "KJH_LIN";  // SQL 저장 클라이이언트 ID
-// 키패드 설정
-const byte ROWS = 4; 
-=======
 
 char recvId[10] = "MJY_LIN";
-
 const byte ROWS = 4;
->>>>>>> 40b3f7df81fe6f838eaac0ed88ba4d4e6d6cbb8d
 const byte COLS = 4;
 char keys[ROWS][COLS] = {
   {'1','2','3','A'},

@@ -231,6 +231,8 @@ int main(void)
 		if(infraredSensorData == 10)	//문열기 코드 10
 		{
 			//문 열기 코드
+			int pulseWidth = 1700;
+			__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, pulseWidth - 1);
 		}
 
 		//손님 수 카운트 코드
