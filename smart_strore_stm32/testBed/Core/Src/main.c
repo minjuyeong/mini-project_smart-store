@@ -21,7 +21,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <stdio.h>
+#include <math.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -31,7 +32,13 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#ifdef __GNUC__
+/* With GCC, small printf (option LD Linker->Libraries->Small printf
+   set to 'Yes') calls __io_putchar() */
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif /* __GNUC__ */
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -40,7 +47,7 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-TIM_HandleTypeDef htim4;
+ADC_HandleTypeDef hadc1;
 
 UART_HandleTypeDef huart2;
 
@@ -52,9 +59,10 @@ UART_HandleTypeDef huart2;
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
-static void MX_TIM4_Init(void);
+static void MX_ADC1_Init(void);
 /* USER CODE BEGIN PFP */
-
+void stepMotor(int step);
+void rotateMotor(int steps);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -92,20 +100,69 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART2_UART_Init();
-  MX_TIM4_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-  if(HAL_TIM_Base_Start_IT(&htim4) != HAL_OK)
-	  Error_Handler();
-  if(HAL_TIM_PWM_Start(&htim4,TIM_CHANNEL_1) != HAL_OK)
-	  Error_Handler();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  int fanSpeed = 1000;
-	  __HAL_TIM_SetCompare(&htim4,TIM_CHANNEL_1, fanSpeed);
+#if 0	//적외선 센서
+	  HAL_ADC_Start(&hadc1);
+
+	  // ADC 변환 완료 대기
+	  HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
+
+	  // ADC 값 읽기
+	  uint32_t adcValue = HAL_ADC_GetValue(&hadc1);
+	  //printf("%d\r\n", adcValue);
+
+	  // ADC 값을 전압으로 변환
+	  float voltage = (adcValue / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
+
+	  // 거리 계산 (센서의 특성에 따라 조정)
+	  float distance = 27.86f / pow(voltage, 1.15f);
+
+	  // 거리 값 출력 (예: UART, LCD 등으로 출력 가능)
+	  printf("red : %f\r\n", distance);
+	  HAL_Delay(1000); // 500ms 대
+#endif
+	//초음파 센서
+#if 1 //초음파센서
+	  // TRIG 핀을 LOW로 설정
+	  HAL_GPIO_WritePin(TRIG_OUTPUT_GPIO_Port, TRIG_OUTPUT_Pin, GPIO_PIN_RESET);
+	  HAL_Delay(2);
+
+	  // TRIG 핀을 HIGH로 설정
+	  HAL_GPIO_WritePin(TRIG_OUTPUT_GPIO_Port, TRIG_OUTPUT_Pin, GPIO_PIN_SET);
+	  HAL_Delay(10);
+	  HAL_GPIO_WritePin(TRIG_OUTPUT_GPIO_Port, TRIG_OUTPUT_Pin, GPIO_PIN_RESET);
+
+	  // ECHO 핀에서 신호의 지속 시간을 측정
+	  uint32_t startTime = HAL_GetTick();
+	  while (HAL_GPIO_ReadPin(ECHO_INPUT_GPIO_Port, ECHO_INPUT_Pin) == GPIO_PIN_RESET) {
+		  startTime = HAL_GetTick();
+	  }
+
+	  uint32_t travelTime = HAL_GetTick() - startTime;
+
+	  while (HAL_GPIO_ReadPin(ECHO_INPUT_GPIO_Port, ECHO_INPUT_Pin) == GPIO_PIN_SET) {
+		  travelTime = HAL_GetTick() - startTime;
+	  }
+
+	  // 거리 계산 (cm)
+	  float sonic_distance = (343.0f * travelTime) / 2000.0f;
+
+	  // 거리 출력 (UART 또는 LCD 등으로 출력 가능)
+	  // 예: HAL_UART_Transmit(&huart1, (uint8_t*)&distance, sizeof(distance), HAL_MAX_DELAY);
+	  printf("u_sonic : %f\r\n", sonic_distance);
+	  HAL_Delay(1000); // 1초 대기
+#endif
+	 rotateMotor(512); // 512 스텝 회전 (한 바퀴)
+	 HAL_Delay(1000); // 1초 대기
+	 rotateMotor(-512); // 반대 방향으로 512 스텝 회전
+	 HAL_Delay(1000); // 1초 대기
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -160,61 +217,54 @@ void SystemClock_Config(void)
 }
 
 /**
-  * @brief TIM4 Initialization Function
+  * @brief ADC1 Initialization Function
   * @param None
   * @retval None
   */
-static void MX_TIM4_Init(void)
+static void MX_ADC1_Init(void)
 {
 
-  /* USER CODE BEGIN TIM4_Init 0 */
+  /* USER CODE BEGIN ADC1_Init 0 */
 
-  /* USER CODE END TIM4_Init 0 */
+  /* USER CODE END ADC1_Init 0 */
 
-  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
-  TIM_MasterConfigTypeDef sMasterConfig = {0};
-  TIM_OC_InitTypeDef sConfigOC = {0};
+  ADC_ChannelConfTypeDef sConfig = {0};
 
-  /* USER CODE BEGIN TIM4_Init 1 */
+  /* USER CODE BEGIN ADC1_Init 1 */
 
-  /* USER CODE END TIM4_Init 1 */
-  htim4.Instance = TIM4;
-  htim4.Init.Prescaler = 84-1;
-  htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim4.Init.Period = 1000-1;
-  htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
-  if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
+  /* USER CODE END ADC1_Init 1 */
+
+  /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
+  */
+  hadc1.Instance = ADC1;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
+  hadc1.Init.ScanConvMode = DISABLE;
+  hadc1.Init.ContinuousConvMode = DISABLE;
+  hadc1.Init.DiscontinuousConvMode = DISABLE;
+  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc1.Init.NbrOfConversion = 1;
+  hadc1.Init.DMAContinuousRequests = DISABLE;
+  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  if (HAL_ADC_Init(&hadc1) != HAL_OK)
   {
     Error_Handler();
   }
-  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-  if (HAL_TIM_ConfigClockSource(&htim4, &sClockSourceConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_TIM_PWM_Init(&htim4) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim4, &sMasterConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 500-1;
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  if (HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM4_Init 2 */
 
-  /* USER CODE END TIM4_Init 2 */
-  HAL_TIM_MspPostInit(&htim4);
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_0;
+  sConfig.Rank = 1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC1_Init 2 */
+
+  /* USER CODE END ADC1_Init 2 */
 
 }
 
@@ -270,13 +320,32 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(TRIG_OUTPUT_GPIO_Port, TRIG_OUTPUT_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, IN1_Pin|IN2_Pin|IN3_Pin|IN4_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : humanCnt_Pin ECHO_INPUT_Pin */
+  GPIO_InitStruct.Pin = humanCnt_Pin|ECHO_INPUT_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : TRIG_OUTPUT_Pin */
+  GPIO_InitStruct.Pin = TRIG_OUTPUT_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(TRIG_OUTPUT_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : LD2_Pin */
   GPIO_InitStruct.Pin = LD2_Pin;
@@ -285,13 +354,64 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
 
+  /*Configure GPIO pins : IN1_Pin IN2_Pin IN3_Pin IN4_Pin */
+  GPIO_InitStruct.Pin = IN1_Pin|IN2_Pin|IN3_Pin|IN4_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
   /* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
+PUTCHAR_PROTOTYPE
+{
+  /* Place your implementation of fputc here */
+  /* e.g. write a character to the USART6 and Loop until the end of transmission */
+  HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 0xFFFF);
 
+  return ch;
+}
+void stepMotor(int step) {
+    switch (step) {
+        case 0:
+            HAL_GPIO_WritePin(GPIOB, IN1_Pin, GPIO_PIN_SET);
+            HAL_GPIO_WritePin(GPIOB, IN2_Pin, GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(GPIOB, IN3_Pin, GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(GPIOB, IN4_Pin, GPIO_PIN_RESET);
+            break;
+        case 1:
+            HAL_GPIO_WritePin(GPIOB, IN1_Pin, GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(GPIOB, IN2_Pin, GPIO_PIN_SET);
+            HAL_GPIO_WritePin(GPIOB, IN3_Pin, GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(GPIOB, IN4_Pin, GPIO_PIN_RESET);
+            break;
+        case 2:
+            HAL_GPIO_WritePin(GPIOB, IN1_Pin, GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(GPIOB, IN2_Pin, GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(GPIOB, IN3_Pin, GPIO_PIN_SET);
+            HAL_GPIO_WritePin(GPIOB, IN4_Pin, GPIO_PIN_RESET);
+            break;
+        case 3:
+            HAL_GPIO_WritePin(GPIOB, IN1_Pin, GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(GPIOB, IN2_Pin, GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(GPIOB, IN3_Pin, GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(GPIOB, IN4_Pin, GPIO_PIN_SET);
+            break;
+    }
+}
+
+void rotateMotor(int steps) {
+    for (int i = 0; i < steps; i++) {
+        for (int j = 0; j < 4; j++) {
+            stepMotor(j);
+            HAL_Delay(1); // 스텝 간의 지연 시간
+        }
+    }
+}
 /* USER CODE END 4 */
 
 /**

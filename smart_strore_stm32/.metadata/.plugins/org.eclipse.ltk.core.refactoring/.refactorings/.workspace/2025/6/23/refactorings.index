@@ -13,3 +13,5 @@
 1748757471596	Rename resource 'nucleo_f411re_uart2_printf_uart6_wifi_clcd_dht11_tim4pwm1_servo_tim3rgbLed'
 1748757479195	Delete resource 'smart_store_stm32/nucleo_f411re_uart2_printf_uart6_wifi_clcd_dht11_tim4pwm1_servo_tim3rgbLed.launch'
 1748757484722	Delete resource 'smart_store_stm32/Debug'
+1748831451929	Delete resource 'testBed/Core/Inc/sr04.h'
+1748831455195	Delete resource 'testBed/Core/Src/sr04.c'

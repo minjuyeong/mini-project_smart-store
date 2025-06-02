@@ -37,13 +37,13 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#ifdef __GNUC__
-/* With GCC, small printf (option LD Linker->Libraries->Small printf
-   set to 'Yes') calls __io_putchar() */
-#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
-#else
-#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
-#endif /* __GNUC__ */
+//#ifdef __GNUC__
+///* With GCC, small printf (option LD Linker->Libraries->Small printf
+//   set to 'Yes') calls __io_putchar() */
+//#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+//#else
+//#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+//#endif /* __GNUC__ */
 #define ARR_CNT 5
 #define CMD_SIZE 50
 
@@ -213,6 +213,11 @@ int main(void)
 					printf("DHT11 response error\r\n");
 			}
 		}
+		// 자동문열기
+		//먼저 센서 값 읽어서 저장하기
+/*
+
+ */
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -585,6 +590,14 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+//PUTCHAR_PROTOTYPE
+//{
+//  /* Place your implementation of fputc here */
+//  /* e.g. write a character to the USART6 and Loop until the end of transmission */
+//  HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 0xFFFF);
+//
+//  return ch;
+//}
 void MX_GPIO_LED_ON(int pin)
 {
 	HAL_GPIO_WritePin(LD2_GPIO_Port, pin, GPIO_PIN_SET);
