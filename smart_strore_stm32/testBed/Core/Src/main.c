@@ -117,19 +117,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  if(HAL_ADC_Start_IT(&hadc1) != HAL_OK)
-		  Error_Handler();
-	  if(ADC1ConvertValue[0] >= 1500 && adcFlag)
-	  {
-		  printf("motor on\r\n");
-		  __HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_1, 1700);
-//		  HAL_Delay(5000);
-	  }
-//		  __HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_1, 1700);
-	  else if(ADC1ConvertValue[0] <= 1500)
-		  __HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_1, 0);
-//	  else
-//		  __HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_1, 1500);
+	  __HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_1, 1000);
+	  HAL_Delay(1000);
+	  __HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_1, 600);
+	  HAL_Delay(1000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

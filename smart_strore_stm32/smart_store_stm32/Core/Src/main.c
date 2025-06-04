@@ -1,34 +1,34 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2024 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2024 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#include "dht.h"  //온습도 센서 헤더
+#include "esp.h"  //wifi 모듈 헤더
+#include <math.h> //pow() 연산시 필요
 #include <stdbool.h>
-#include <math.h>	//pow() 연산시 필요
-#include "esp.h"	//wifi 모듈 헤더
-#include "dht.h"	//온습도 센서 헤더
-//#include "clcd.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+// #include "clcd.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -38,10 +38,10 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define ARR_CNT 20	//pArray에 사용되는 크기 [@]에 의해 구별되는 명령의 크기
-#define CMD_SIZE 50	//명령의 전체 사이즈
+#define ARR_CNT 20  // pArray에 사용되는 크기 [@]에 의해 구별되는 명령의 크기
+#define CMD_SIZE 50 // 명령의 전체 사이즈
 
-//디버깅용 printf 사용을 위한 구문
+// 디버깅용 printf 사용을 위한 구문
 #ifdef __GNUC__
 /* With GCC, small printf (option LD Linker->Libraries->Small printf
    set to 'Yes') calls __io_putchar() */
@@ -72,42 +72,42 @@ uint8_t rx2char;
 extern cb_data_t cb_data;
 extern volatile unsigned char rx2Flag;
 extern volatile char rx2Data[50];
-volatile int tim3Flag1Sec=1;
+volatile int tim3Flag1Sec = 1;
 volatile unsigned int tim3Sec;
 
-//각 장치의 데이터 저장
-int humi; //습도, 정수로만
-char temp[10];	//온도는, 소수점 앞뒤로 따로 저장되므로 문자열로 한번에 저장
-int customerCount = 0;	//현재 매장 내 손님 수 저장(인체감지 센서)
-int ledState;	//led(조명의 밝기) 저장
-int fanSpeed=0;	//ez모터의 회전수 저장	//0~1000
-bool lockState;	//true면 lock faluse 면 off
+// 각 장치의 데이터 저장
+int humi;              // 습도, 정수로만
+char temp[10];         // 온도는, 소수점 앞뒤로 따로 저장되므로 문자열로 한번에 저장
+int customerCount = 0; // 현재 매장 내 손님 수 저장(인체감지 센서)
+int ledState;          // led(조명의 밝기) 저장
+int fanSpeed = 0;      // ez모터의 회전수 저장	//0~1000
+bool lockState;        // true면 lock faluse 면 off
 
-//각 장치의 작동 가능 플래그, 각 플래그들이 true면 값을 수정할 수 있다.
-//allstop 명
+// 각 장치의 작동 가능 플래그, 각 플래그들이 true면 값을 수정할 수 있다.
+// allstop 명
 bool fanFlag = false;
 
-//초음파 센서 관련 변수
+// 초음파 센서 관련 변수
 uint32_t IC_Val1 = 0;
 uint32_t IC_Val2 = 0;
 uint32_t Difference = 0;
-uint8_t Is_First_Captured = 0;  // is the first value captured ?
+uint8_t Is_First_Captured = 0; // is the first value captured ?
 
 int pulseWidth = 0;
 
-//uint32_t Read_ADC_Channel(uint32_t channel);
-__IO uint16_t ADC1ConvertValue[2]={0};
+__IO uint16_t ADC1ConvertValue[2] = {0};
 __IO int adcFlag = 0;
 int closeFlag = 1;
 
 typedef struct
 {
-	float distance;
-	uint32_t sensorReadTime;
+    float distance;
+    uint32_t sensorReadTime;
 } Data;
 
 Data outDoorSensor = {0.0, 0};
-Data inDoorSensor  = {0.0, 0};
+Data inDoorSensor = {0.0, 0};
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -127,11 +127,10 @@ void MX_GPIO_LED_OFF(int flag);
 void esp_event(char *);
 long map(long x, long in_min, long in_max, long out_min, long out_max);
 
-void fanControl(int fanSpeed);	//fan 회전수를 변경하는 함수
+void fanControl(int fanSpeed); // fan 회전수를 변경하는 함수
 void ledControl(int ledState);
 
-//int infraredSensor();	//적외선 센서 데이터
-
+// int infraredSensor();	//적외선 센서 데이터
 
 /* USER CODE END PFP */
 
@@ -148,9 +147,9 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-	int ret = 0;
-	DHT11_TypeDef dht11Data;
-//	bool servoFlag = 0;
+    int ret = 0;
+    DHT11_TypeDef dht11Data;
+    //	bool servoFlag = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -179,114 +178,106 @@ int main(void)
   MX_ADC1_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-  printf("Start main() - wifi\r\n");
-  ret |= drv_uart_init();
-  ret |= drv_esp_init();
-  if(ret != 0)
-  {
-	  printf("Esp response error\r\n");
-	  Error_Handler();
-  }
+    printf("Start main() - wifi\r\n");
+    ret |= drv_uart_init();
+    ret |= drv_esp_init();
+    if (ret != 0)
+    {
+        printf("Esp response error\r\n");
+        Error_Handler();
+    }
 
-  AiotClient_Init();
+    AiotClient_Init();
 
-  DHT11_Init();
+    DHT11_Init();
 
-  if(HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1) != HAL_OK)
-	  Error_Handler();
-  if(HAL_TIM_Base_Start_IT(&htim2) != HAL_OK)
-	  Error_Handler();
-  if(HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1) != HAL_OK)
-	  Error_Handler();
-  if(HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1) != HAL_OK)
-	  Error_Handler();
+    if (HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1) != HAL_OK)
+        Error_Handler();
+    if (HAL_TIM_Base_Start_IT(&htim2) != HAL_OK)
+        Error_Handler();
+    if (HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1) != HAL_OK)
+        Error_Handler();
+    if (HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1) != HAL_OK)
+        Error_Handler();
+    if (HAL_TIM_Base_Start_IT(&htim3) != HAL_OK)
+        Error_Handler();
 
-  if(HAL_TIM_PWM_Start(&htim4,TIM_CHANNEL_1) != HAL_OK)
-	  Error_Handler();
+    if (HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1) != HAL_OK)
+        Error_Handler();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-//	    int infraredSensorData = infraredSensor();	//출입문 적외선센서 값
-	  	if(HAL_ADC_Start_IT(&hadc1) != HAL_OK)
-		    Error_Handler();
-		if(strstr((char *)cb_data.buf,"+IPD") && cb_data.buf[cb_data.length-1] == '\n')
-		{
-			//?��?��?���??  \r\n+IPD,15:[KSH_LIN]HELLO\n
-			strcpy(strBuff,strchr((char *)cb_data.buf,'['));
-			memset(cb_data.buf,0x0,sizeof(cb_data.buf));
-			cb_data.length = 0;
-			esp_event(strBuff);
-		}
-		if(rx2Flag)
-		{
-			printf("recv2 : %s\r\n",rx2Data);
-			rx2Flag =0;
-		}
-		if(tim3Flag1Sec)	//1초에 한번
-		{
-			tim3Flag1Sec = 0;
-			if(!(tim3Sec%10)) //10초에 한번
-			{
-				if(esp_get_status() != 0)
-				{
-					printf("server connecting ...\r\n");
-					esp_client_conn();
-				}
-			}
-			printf("tim3Sec : %d\r\n",tim3Sec);
-			if(!(tim3Sec%5)) //5초에 한번
-			{
-				//dht11에서 값 읽어오기
-				dht11Data = DHT11_readData();
-				if(dht11Data.rh_byte1 != 255)
-				{
-					//온도 데이터 전역변수 temp에 저장
-					sprintf(temp, "%d.%d", dht11Data.temp_byte1, dht11Data.temp_byte2);
-					//습도 데이터 전역변수 humi 에 저장
-					humi = dht11Data.rh_byte1;
-				}
-				else
-					printf("DHT11 response error\r\n");
-//				if (servoFlag)
-//				{
-//					servoFlag = 0;
-//					__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 1500);
-				}
-			}
-			if(!(tim3Sec%2))
-			{
-				if (closeFlag)
-				{
-					__HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_1, 0);
-					closeFlag = 0;
-				}
-			}
-//		printf("adc1 ch0 : %d\r\n", ADC1ConvertValue[0]);
-//		printf("adc1 ch1 : %d\r\n", ADC1ConvertValue[1]);
-		//outdoorsensor 거리 변환
-		float voltage = (ADC1ConvertValue[0] / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
-		if (voltage < 0.1f) voltage = 0.1f;
-		outDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
-//		printf("out distance : %f\r\n", outDoorSensor.distance);
+    while (1)
+    {
+        if (HAL_ADC_Start_IT(&hadc1) != HAL_OK)
+            Error_Handler();
+        if (strstr((char *)cb_data.buf, "+IPD") && cb_data.buf[cb_data.length - 1] == '\n')
+        {
+            //?��?��?���??  \r\n+IPD,15:[KSH_LIN]HELLO\n
+            strcpy(strBuff, strchr((char *)cb_data.buf, '['));
+            memset(cb_data.buf, 0x0, sizeof(cb_data.buf));
+            cb_data.length = 0;
+            esp_event(strBuff);
+        }
+        if (rx2Flag)
+        {
+            printf("recv2 : %s\r\n", rx2Data);
+            rx2Flag = 0;
+        }
+        if (tim3Flag1Sec) // 1초에 한번
+        {
+            tim3Flag1Sec = 0;
+            if (!(tim3Sec % 10)) // 10초에 한번
+            {
+                if (esp_get_status() != 0)
+                {
+                    printf("server connecting ...\r\n");
+                    esp_client_conn();
+                }
+            }
+            if (!(tim3Sec % 5)) // 5초에 한번
+            {
+                // dht11에서 값 읽어오기
+                dht11Data = DHT11_readData();
+                if (dht11Data.rh_byte1 != 255)
+                {
+                    // 온도 데이터 전역변수 temp에 저장
+                    sprintf(temp, "%d.%d", dht11Data.temp_byte1, dht11Data.temp_byte2);
+                    // 습도 데이터 전역변수 humi 에 저장
+                    humi = dht11Data.rh_byte1;
+                }
+                else
+                    printf("DHT11 response error\r\n");
+            }
+        }
+        // outdoorsensor 거리 변환
+        float voltage = (ADC1ConvertValue[0] / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
+        if (voltage < 0.1f)
+            voltage = 0.1f;
+        outDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
 
-		//indoorsensor 거리 변환
-		voltage = (ADC1ConvertValue[1] / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
-		if (voltage < 0.1f) voltage = 0.1f;
-		inDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
-		printf("in distance : %f\r\n", inDoorSensor.distance);
-		printf("out distance : %f\r\n", outDoorSensor.distance);
+        // indoorsensor 거리 변환
+        voltage = (ADC1ConvertValue[1] / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
+        if (voltage < 0.1f)
+            voltage = 0.1f;
+        inDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
+//        printf("in distance : %f\r\n", inDoorSensor.distance);
+//        printf("out distance : %f\r\n", outDoorSensor.distance);
 
-		if((outDoorSensor.distance <= 30.0 || inDoorSensor.distance <= 30.0)  && !closeFlag)
-		{
-			__HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_1, 1700);
-			closeFlag = 1;
-		}
+//        if (outDoorSensor.distance < 20 || inDoorSensor.distance < 20)
+//        {
+//            char sendBuf[MAX_UART_COMMAND_LEN] = {0};
+//
+//        	sprintf(sendBuf, "[A_DOOR]DOOR@OPEN\n");
+//        	esp_send_data(sendBuf);
+//        }
+
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    }
   /* USER CODE END 3 */
 }
 
@@ -775,202 +766,145 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-//PUTCHAR_PROTOTYPE
+// PUTCHAR_PROTOTYPE
 //{
-//  /* Place your implementation of fputc here */
-//  /* e.g. write a character to the USART6 and Loop until the end of transmission */
-//  HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 0xFFFF);
+//   /* Place your implementation of fputc here */
+//   /* e.g. write a character to the USART6 and Loop until the end of transmission */
+//   HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 0xFFFF);
 //
-//  return ch;
-//}
+//   return ch;
+// }
 
 void MX_GPIO_LED_ON(int pin)
 {
-	HAL_GPIO_WritePin(LD2_GPIO_Port, pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(LD2_GPIO_Port, pin, GPIO_PIN_SET);
 }
 void MX_GPIO_LED_OFF(int pin)
 {
-	HAL_GPIO_WritePin(LD2_GPIO_Port, pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(LD2_GPIO_Port, pin, GPIO_PIN_RESET);
 }
-void esp_event(char * recvBuf)
+void esp_event(char *recvBuf)
 {
-  int i=0;
-  char * pToken;
-  char * pArray[ARR_CNT]={0};
-  char sendBuf[MAX_UART_COMMAND_LEN]={0};
+    int i = 0;
+    char *pToken;
+    char *pArray[ARR_CNT] = {0};
+    char sendBuf[200] = {0};
 
-  strBuff[strlen(recvBuf)-1] = '\0';	//'\n' cut
-  printf("\r\nDebug recv : %s\r\n",recvBuf);
+    strBuff[strlen(recvBuf) - 1] = '\0'; //'\n' cut
+    printf("\r\nDebug recv : %s\r\n", recvBuf);
 
-  pToken = strtok(recvBuf,"[@]");
-  while(pToken != NULL)
-  {
-    pArray[i] = pToken;
-    if(++i >= ARR_CNT)
-      break;
-    pToken = strtok(NULL,"[@]");
-  }
+    pToken = strtok(recvBuf, "[@]");
+    while (pToken != NULL)
+    {
+        pArray[i] = pToken;
+        if (++i >= ARR_CNT)
+            break;
+        pToken = strtok(NULL, "[@]");
+    }
 
-  if(!strcmp(pArray[1], "ALLSTOP"))
-  {
-	  if(!strcmp(pArray[2], "ON"))
-	  {
-		  //모든 장치 정지 명령 내리기(모든 플래그 True로)
-	  }
-	  else if(!strcmp(pArray[2], "OFF"))
-	  {
-		  //모든 장치 정지 명령 취소(모든 플래그 false로)
-	  }
-  }
-  else if(!strcmp(pArray[1], "STATE"))
-  {
-	  //현재 매장의 상태 전송하기
-	 sprintf(sendBuf, "[%s]%s@%s@%d@%d@%d@%d@%d\n", pArray[0], pArray[1], temp, humi, ledState, lockState, customerCount, fanSpeed);
-  }
-  else if(!strcmp(pArray[1], "FAN"))	//팬 회전수 0~1000
-  {
-	  fanSpeed = atoi(pArray[2]);
-	  fanControl(fanSpeed);
-	  sprintf(sendBuf, "[%s]%s@%d\n", pArray[0], pArray[1], fanSpeed);
-  }
-  else if(!strcmp(pArray[1], "DHTSTATE"))	//온습도 보내기
-  {
-	  sprintf(sendBuf, "[%s]%s@%s@%d\n", pArray[0], pArray[1], temp, humi);
-  }
-  else if(!strcmp(pArray[1], "LED"))	//[매장명]LED@pArray[2]or[State]@
-  {
-	  if(!strcmp(pArray[2], "STATE"))
-	  {
-		  sprintf(sendBuf, "[%s]%s@%s@%d\n", pArray[0], pArray[1], pArray[2], ledState);
-	  }
-	  else
-	  {
-		  ledControl(atoi(pArray[2]));
-		  sprintf(sendBuf, "[%s]%s@%d\n", pArray[0], pArray[1], atoi(pArray[2]));
-	  }
-  }
-  else if (!strcmp(pArray[1], "SERVO"))
-  {
-	  if (!strcmp(pArray[2], "ON"))
-	  {
-		  __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 1700);
-		  sprintf(sendBuf, "[%s]%s@%s\n", pArray[0], pArray[1], pArray[2]);
-	  }
-	  else if(!strcmp(pArray[2], "OFF"))
-	  {
-		  __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 1500);
-		  sprintf(sendBuf, "[%s]%s@%s\n", pArray[0], pArray[1], pArray[2]);
-	  }
-  }
-  else if(!strncmp(pArray[1]," New conn",8))
-  {
-//	   printf("Debug : %s, %s\r\n",pArray[0],pArray[1]);
-     return;
-  }
-  else if(!strncmp(pArray[1]," Already log",8))
-  {
-// 	    printf("Debug : %s, %s\r\n",pArray[0],pArray[1]);
-	  esp_client_conn();
-      return;
-  }
-  else
-      return;
+    if (!strcmp(pArray[1], "ALLSTOP"))
+    {
+        if (!strcmp(pArray[2], "ON"))
+        {
+            // 모든 장치 정지 명령 내리기(모든 플래그 True로)
+        }
+        else if (!strcmp(pArray[2], "OFF"))
+        {
+            // 모든 장치 정지 명령 취소(모든 플래그 false로)
+        }
+    }
+    else if (!strcmp(pArray[1], "STATE"))
+    {
+        // 현재 매장의 상태 전송하기
+        sprintf(sendBuf, "[%s]%s@%s@%d@%d@%d@%d@%d\n", pArray[0], pArray[1], temp, humi, ledState, lockState, customerCount, fanSpeed);
+    }
+    else if (!strcmp(pArray[1], "FAN")) // 팬 회전수 0~1000
+    {
+        fanSpeed = atoi(pArray[2]);
+        fanControl(fanSpeed);
+        sprintf(sendBuf, "[%s]%s@%d\n", pArray[0], pArray[1], fanSpeed);
+    }
+    else if (!strcmp(pArray[1], "DHTSTATE")) // 온습도 보내기
+    {
+        sprintf(sendBuf, "[%s]%s@%s@%d\n", pArray[0], pArray[1], temp, humi);
+    }
+    else if (!strcmp(pArray[1], "LED")) //[매장명]LED@pArray[2]or[State]@
+    {
+        if (!strcmp(pArray[2], "STATE"))
+        {
+            sprintf(sendBuf, "[%s]%s@%s@%d\n", pArray[0], pArray[1], pArray[2], ledState);
+        }
+        else
+        {
+            ledControl(atoi(pArray[2]));
+            sprintf(sendBuf, "[%s]%s@%d\n", pArray[0], pArray[1], atoi(pArray[2]));
+        }
+    }
+    else if (!strncmp(pArray[1], " New conn", 8))
+    {
+        printf("Debug : %s, %s\r\n",pArray[0],pArray[1]);
+    }
+    else if (!strncmp(pArray[1], " Already log", 8))
+    {
+        esp_client_conn();
+        return;
+    }
+    else
+        return;
 
-  esp_send_data(sendBuf);
-//  printf("Debug send : %s\r\n",sendBuf);
+    esp_send_data(sendBuf);
+    printf("Debug send : %s\r\n",sendBuf);
+
 }
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)		//1ms 마다 호출
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) // 1ms 마다 호출
 {
-	static int tim3Cnt = 0;
-	tim3Cnt++;
-	if(tim3Cnt >= 1000) //1ms * 1000 = 1Sec
-	{
-		tim3Flag1Sec = 1;
-		tim3Sec++;
-		tim3Cnt = 0;
-	}
+    static int tim3Cnt = 0;
+    tim3Cnt++;
+    if (tim3Cnt >= 1000) // 1ms * 1000 = 1Sec
+    {
+        tim3Flag1Sec = 1;
+        tim3Sec++;
+        tim3Cnt = 0;
+    }
 }
 
-long map(long x, long in_min, long in_max, long out_min, long out_max) {
-  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+long map(long x, long in_min, long in_max, long out_min, long out_max)
+{
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
 void fanControl(int fanSpeed)
 {
-	if (!fanFlag)	//플래그들은 0일 때만 동작을 의미함.
-	{
-		__HAL_TIM_SetCompare(&htim4,TIM_CHANNEL_1, fanSpeed);
-	}
+    if (!fanFlag) // 플래그들은 0일 때만 동작을 의미함.
+    {
+        __HAL_TIM_SetCompare(&htim4, TIM_CHANNEL_1, fanSpeed);
+    }
 }
 
 void ledControl(int bright)
 {
-	ledState = bright;	//전역변수에 저장
-	int realLedState = map(bright, 0, 100, 0, 1000);	//써지는 실제값
-	__HAL_TIM_SetCompare(&htim1,TIM_CHANNEL_1, realLedState);
+    ledState = bright;                               // 전역변수에 저장
+    int realLedState = map(bright, 0, 100, 0, 1000); // 써지는 실제값
+    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_1, realLedState);
 }
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
-//	printf("check");
-	static int channel = 0;
-	if (channel == 0)
-	{
-		ADC1ConvertValue[channel] = HAL_ADC_GetValue(hadc);
-		channel = 1;
-	}
-	else if(channel == 1)
-	{
-		ADC1ConvertValue[channel]= HAL_ADC_GetValue(hadc);
-		channel = 0;
-		adcFlag = 1;
-	}
-	printf("ch1 : %d , ch2 : %d\r\n", ADC1ConvertValue[0], ADC1ConvertValue[1]);
+    static int channel = 0;
+    if (channel == 0)
+    {
+        ADC1ConvertValue[channel] = HAL_ADC_GetValue(hadc);
+        outDoorSensor.sensorReadTime = HAL_GetTick();	//들어오고 나가는 사라 카운트를 하기 위함
+        channel = 1;
+    }
+    else if (channel == 1)
+    {
+        ADC1ConvertValue[channel] = HAL_ADC_GetValue(hadc);
+        inDoorSensor.sensorReadTime = HAL_GetTick(); //들어오고 나가는 사라 카운트하기 위함.
+        channel = 0;
+        adcFlag = 1;
+    }
 }
-//int infraredSensor(void)
-//{
-//   typedef struct
-//   {
-//	   float distance;
-//	   uint32_t sensorReadTime;
-//   } Data;
-//
-//   Data outDoorSensor = {0.0, 0};
-//   Data inDoorSensor  = {0.0, 0};
-//   uint32_t adcValue;
-//   outDoorSensor.sensorReadTime = HAL_GetTick();
-//   inDoorSensor.sensorReadTime = HAL_GetTick();
-//
-//   adcValue = Read_ADC_Channel(ADC_CHANNEL_0);
-//   // adc chennel1 값을 전압으로 변환
-//   float voltage = (adcValue / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
-//   // outDoorSensor 거리 계산 (센서의 특성에 따라 조정)
-//   outDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
-//
-//   adcValue = Read_ADC_Channel(ADC_CHANNEL_1);
-//   // adc chennel1 값을 전압으로 변환
-//   voltage = (adcValue / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
-//   // inDoorSensor 거리 계산 (센서의 특성에 따라 조정)
-//   inDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
-//
-//  if(outDoorSensor.distance < 10 || inDoorSensor.distance < 10)
-//  {
-//	  printf("outDoorSensor : %f\r\n", outDoorSensor.distance);
-//	  printf("inDoorSensor : %f\r\n", inDoorSensor.distance);
-//	  return 10;	//문열림 코드 10
-//  }
-//  else if((outDoorSensor.sensorReadTime > inDoorSensor.sensorReadTime))
-//  {
-//	  printf("outDoorSensor : %f\r\n", outDoorSensor.distance);
-//	  printf("inDoorSensor : %f\r\n", inDoorSensor.distance);
-//	  return 20;	//손님 수 줄어듬 코드 20
-//  }
-//  else if(inDoorSensor.sensorReadTime > outDoorSensor.sensorReadTime)
-//  {
-//	  printf("outDoorSensor : %f\r\n", outDoorSensor.distance);
-//	  printf("inDoorSensor : %f\r\n", inDoorSensor.distance);
-//	  return 30; 	//손님 수 증가 코드 30
-//  }
 
 /* USER CODE END 4 */
 
@@ -981,11 +915,11 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
-  {
-  }
+    /* User can add his own implementation to report the HAL error return state */
+    __disable_irq();
+    while (1)
+    {
+    }
   /* USER CODE END Error_Handler_Debug */
 }
 
@@ -1000,8 +934,8 @@ void Error_Handler(void)
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+    /* User can add his own implementation to report the file name and line number,
+       ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */

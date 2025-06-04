@@ -1,139 +1,4 @@
-17:00:13 **** Build of configuration Debug for project smart_store_stm32 ****
-make -j8 all 
-arm-none-eabi-gcc "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.d" -MT"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o"
-arm-none-eabi-gcc "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.d" -MT"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.o"
-arm-none-eabi-gcc "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.d" -MT"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.o"
-arm-none-eabi-gcc "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.d" -MT"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o"
-arm-none-eabi-gcc "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.d" -MT"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.o"
-arm-none-eabi-gcc "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.d" -MT"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.o"
-arm-none-eabi-gcc "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.d" -MT"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.o"
-arm-none-eabi-gcc "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.d" -MT"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.o"
-arm-none-eabi-gcc "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.d" -MT"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.o"
-arm-none-eabi-gcc "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.d" -MT"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.o"
-arm-none-eabi-gcc "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.d" -MT"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o"
-arm-none-eabi-gcc "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.d" -MT"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.o"
-arm-none-eabi-gcc "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.d" -MT"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.o"
-arm-none-eabi-gcc "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.d" -MT"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.o"
-arm-none-eabi-gcc "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.d" -MT"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.o"
-arm-none-eabi-gcc "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.d" -MT"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.o"
-arm-none-eabi-gcc "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.d" -MT"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.o"
-arm-none-eabi-gcc "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.d" -MT"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o"
-arm-none-eabi-gcc "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_adc.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_adc.d" -MT"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_adc.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_adc.o"
-arm-none-eabi-gcc -mcpu=cortex-m4 -g3 -DDEBUG -c -x assembler-with-cpp -MMD -MP -MF"Core/Startup/startup_stm32f411retx.d" -MT"Core/Startup/startup_stm32f411retx.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Startup/startup_stm32f411retx.o" "../Core/Startup/startup_stm32f411retx.s"
-arm-none-eabi-gcc "../Core/Src/dht.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/dht.d" -MT"Core/Src/dht.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/dht.o"
-arm-none-eabi-gcc "../Core/Src/esp.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/esp.d" -MT"Core/Src/esp.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/esp.o"
-arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
-arm-none-eabi-gcc "../Core/Src/stm32f4xx_hal_msp.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f4xx_hal_msp.d" -MT"Core/Src/stm32f4xx_hal_msp.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/stm32f4xx_hal_msp.o"
-arm-none-eabi-gcc "../Core/Src/stm32f4xx_it.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f4xx_it.d" -MT"Core/Src/stm32f4xx_it.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/stm32f4xx_it.o"
-../Core/Src/main.c: In function 'main':
-../Core/Src/main.c:343:13: error: invalid storage class for function 'MX_ADC1_Init'
-  343 | static void MX_ADC1_Init(void)
-      |             ^~~~~~~~~~~~
-../Core/Src/main.c:404:13: error: invalid storage class for function 'MX_TIM1_Init'
-  404 | static void MX_TIM1_Init(void)
-      |             ^~~~~~~~~~~~
-../Core/Src/main.c:479:13: error: invalid storage class for function 'MX_TIM2_Init'
-  479 | static void MX_TIM2_Init(void)
-      |             ^~~~~~~~~~~~
-../Core/Src/main.c:538:13: error: invalid storage class for function 'MX_TIM3_Init'
-  538 | static void MX_TIM3_Init(void)
-      |             ^~~~~~~~~~~~
-../Core/Src/main.c:597:13: error: invalid storage class for function 'MX_TIM4_Init'
-  597 | static void MX_TIM4_Init(void)
-      |             ^~~~~~~~~~~~
-../Core/Src/main.c:656:13: error: invalid storage class for function 'MX_USART2_UART_Init'
-  656 | static void MX_USART2_UART_Init(void)
-      |             ^~~~~~~~~~~~~~~~~~~
-../Core/Src/main.c:689:13: error: invalid storage class for function 'MX_USART6_UART_Init'
-  689 | static void MX_USART6_UART_Init(void)
-      |             ^~~~~~~~~~~~~~~~~~~
-../Core/Src/main.c:722:13: error: invalid storage class for function 'MX_GPIO_Init'
-  722 | static void MX_GPIO_Init(void)
-      |             ^~~~~~~~~~~~
-../Core/Src/main.c:991:1: error: expected declaration or statement at end of input
-  991 | }
-      | ^
-../Core/Src/main.c: At top level:
-../Core/Src/main.c:115:13: warning: 'MX_GPIO_Init' used but never defined
-  115 | static void MX_GPIO_Init(void);
-      |             ^~~~~~~~~~~~
-../Core/Src/main.c:116:13: warning: 'MX_USART2_UART_Init' used but never defined
-  116 | static void MX_USART2_UART_Init(void);
-      |             ^~~~~~~~~~~~~~~~~~~
-../Core/Src/main.c:117:13: warning: 'MX_USART6_UART_Init' used but never defined
-  117 | static void MX_USART6_UART_Init(void);
-      |             ^~~~~~~~~~~~~~~~~~~
-../Core/Src/main.c:118:13: warning: 'MX_TIM4_Init' used but never defined
-  118 | static void MX_TIM4_Init(void);
-      |             ^~~~~~~~~~~~
-../Core/Src/main.c:119:13: warning: 'MX_TIM3_Init' used but never defined
-  119 | static void MX_TIM3_Init(void);
-      |             ^~~~~~~~~~~~
-../Core/Src/main.c:120:13: warning: 'MX_TIM1_Init' used but never defined
-  120 | static void MX_TIM1_Init(void);
-      |             ^~~~~~~~~~~~
-../Core/Src/main.c:121:13: warning: 'MX_ADC1_Init' used but never defined
-  121 | static void MX_ADC1_Init(void);
-      |             ^~~~~~~~~~~~
-../Core/Src/main.c:122:13: warning: 'MX_TIM2_Init' used but never defined
-  122 | static void MX_TIM2_Init(void);
-      |             ^~~~~~~~~~~~
-../Core/Src/main.c:981:6: warning: 'Error_Handler' defined but not used [-Wunused-function]
-  981 | void Error_Handler(void)
-      |      ^~~~~~~~~~~~~
-../Core/Src/main.c:913:6: warning: 'HAL_ADC_ConvCpltCallback' defined but not used [-Wunused-function]
-  913 | void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
-      |      ^~~~~~~~~~~~~~~~~~~~~~~~
-../Core/Src/main.c:906:6: warning: 'ledControl' defined but not used [-Wunused-function]
-  906 | void ledControl(int bright)
-      |      ^~~~~~~~~~
-../Core/Src/main.c:898:6: warning: 'fanControl' defined but not used [-Wunused-function]
-  898 | void fanControl(int fanSpeed)
-      |      ^~~~~~~~~~
-../Core/Src/main.c:882:6: warning: 'HAL_TIM_PeriodElapsedCallback' defined but not used [-Wunused-function]
-  882 | void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)             //1ms 마다 호출
-      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../Core/Src/main.c:795:6: warning: 'esp_event' defined but not used [-Wunused-function]
-  795 | void esp_event(char * recvBuf)
-      |      ^~~~~~~~~
-../Core/Src/main.c:791:6: warning: 'MX_GPIO_LED_OFF' defined but not used [-Wunused-function]
-  791 | void MX_GPIO_LED_OFF(int pin)
-      |      ^~~~~~~~~~~~~~~
-../Core/Src/main.c:787:6: warning: 'MX_GPIO_LED_ON' defined but not used [-Wunused-function]
-  787 | void MX_GPIO_LED_ON(int pin)
-      |      ^~~~~~~~~~~~~~
-../Core/Src/main.c:722:13: warning: 'MX_GPIO_Init' defined but not used [-Wunused-function]
-  722 | static void MX_GPIO_Init(void)
-      |             ^~~~~~~~~~~~
-../Core/Src/main.c:689:13: warning: 'MX_USART6_UART_Init' defined but not used [-Wunused-function]
-  689 | static void MX_USART6_UART_Init(void)
-      |             ^~~~~~~~~~~~~~~~~~~
-../Core/Src/main.c:656:13: warning: 'MX_USART2_UART_Init' defined but not used [-Wunused-function]
-  656 | static void MX_USART2_UART_Init(void)
-      |             ^~~~~~~~~~~~~~~~~~~
-../Core/Src/main.c:597:13: warning: 'MX_TIM4_Init' defined but not used [-Wunused-function]
-  597 | static void MX_TIM4_Init(void)
-      |             ^~~~~~~~~~~~
-../Core/Src/main.c:538:13: warning: 'MX_TIM3_Init' defined but not used [-Wunused-function]
-  538 | static void MX_TIM3_Init(void)
-      |             ^~~~~~~~~~~~
-../Core/Src/main.c:479:13: warning: 'MX_TIM2_Init' defined but not used [-Wunused-function]
-  479 | static void MX_TIM2_Init(void)
-      |             ^~~~~~~~~~~~
-../Core/Src/main.c:404:13: warning: 'MX_TIM1_Init' defined but not used [-Wunused-function]
-  404 | static void MX_TIM1_Init(void)
-      |             ^~~~~~~~~~~~
-../Core/Src/main.c:343:13: warning: 'MX_ADC1_Init' defined but not used [-Wunused-function]
-  343 | static void MX_ADC1_Init(void)
-      |             ^~~~~~~~~~~~
-../Core/Src/main.c:297:6: warning: 'SystemClock_Config' defined but not used [-Wunused-function]
-  297 | void SystemClock_Config(void)
-      |      ^~~~~~~~~~~~~~~~~~
-arm-none-eabi-gcc "../Core/Src/syscalls.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/syscalls.d" -MT"Core/Src/syscalls.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/syscalls.o"
-make: *** [Core/Src/subdir.mk:40: Core/Src/main.o] Error 1
-make: *** Waiting for unfinished jobs....
-"make -j8 all" terminated with exit code 2. Build might be incomplete.
-17:01:00 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+17:18:50 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
 make -j8 all 
 arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
 arm-none-eabi-gcc "../Core/Src/sysmem.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/sysmem.d" -MT"Core/Src/sysmem.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/sysmem.o"
@@ -144,12 +9,30 @@ Finished building target: smart_store_stm32.elf
 arm-none-eabi-size  smart_store_stm32.elf 
 arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
    text	   data	    bss	    dec	    hex	filename
-  45212	    476	   4668	  50356	   c4b4	smart_store_stm32.elf
+  45220	    476	   4668	  50364	   c4bc	smart_store_stm32.elf
 Finished building: default.size.stdout
  
 Finished building: smart_store_stm32.list
  
-17:01:46 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+17:19:02 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-size  smart_store_stm32.elf 
+   text	   data	    bss	    dec	    hex	filename
+  45220	    476	   4668	  50364	   c4bc	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+17:19:22 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:254:64: error: 'servoState' undeclared (first use in this function); did you mean 'setstate'?
+  254 |                         if ((tim3Sec % 2 == 0) && closeFlag && servoState == 1) {
+      |                                                                ^~~~~~~~~~
+      |                                                                setstate
+../Core/Src/main.c:254:64: note: each undeclared identifier is reported only once for each function it appears in
+make: *** [Core/Src/subdir.mk:40: Core/Src/main.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+17:19:51 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
 make -j8 all 
 arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
 arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
@@ -158,12 +41,12 @@ Finished building target: smart_store_stm32.elf
 arm-none-eabi-size  smart_store_stm32.elf 
 arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
    text	   data	    bss	    dec	    hex	filename
-  45212	    476	   4668	  50356	   c4b4	smart_store_stm32.elf
+  45236	    476	   4676	  50388	   c4d4	smart_store_stm32.elf
 Finished building: default.size.stdout
  
 Finished building: smart_store_stm32.list
  
-17:03:05 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+17:20:49 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
 make -j8 all 
 arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
 arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
@@ -172,8 +55,739 @@ Finished building target: smart_store_stm32.elf
 arm-none-eabi-size  smart_store_stm32.elf 
 arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
    text	   data	    bss	    dec	    hex	filename
-  45212	    476	   4668	  50356	   c4b4	smart_store_stm32.elf
+  45188	    476	   4676	  50340	   c4a4	smart_store_stm32.elf
 Finished building: default.size.stdout
  
 Finished building: smart_store_stm32.list
+ 
+17:21:29 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  45188	    476	   4676	  50340	   c4a4	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+17:58:22 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  45148	    476	   4676	  50300	   c47c	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+17:59:56 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:154:23: warning: unused variable 'dht11Data' [-Wunused-variable]
+  154 |         DHT11_TypeDef dht11Data;
+      |                       ^~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:292:1: error: expected identifier or '(' before '}' token
+  292 | }
+      | ^
+make: *** [Core/Src/subdir.mk:40: Core/Src/main.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+18:00:09 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:154:23: warning: unused variable 'dht11Data' [-Wunused-variable]
+  154 |         DHT11_TypeDef dht11Data;
+      |                       ^~~~~~~~~
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  39824	    476	   4660	  44960	   afa0	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+18:01:37 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:154:23: warning: unused variable 'dht11Data' [-Wunused-variable]
+  154 |         DHT11_TypeDef dht11Data;
+      |                       ^~~~~~~~~
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  44252	    476	   4676	  49404	   c0fc	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+18:04:02 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:154:23: warning: unused variable 'dht11Data' [-Wunused-variable]
+  154 |         DHT11_TypeDef dht11Data;
+      |                       ^~~~~~~~~
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  44284	    472	   4680	  49436	   c11c	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+18:06:19 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:154:23: warning: unused variable 'dht11Data' [-Wunused-variable]
+  154 |         DHT11_TypeDef dht11Data;
+      |                       ^~~~~~~~~
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  44284	    472	   4680	  49436	   c11c	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+18:15:47 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:154:23: warning: unused variable 'dht11Data' [-Wunused-variable]
+  154 |         DHT11_TypeDef dht11Data;
+      |                       ^~~~~~~~~
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  44788	    472	   4680	  49940	   c314	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+18:16:31 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:203:6: error: too few arguments to function 'HAL_TIM_PWM_Start_IT'
+  203 |   if(HAL_TIM_PWM_Start_IT(&htim3) != HAL_OK)
+      |      ^~~~~~~~~~~~~~~~~~~~
+In file included from ../Core/Inc/stm32f4xx_hal_conf.h:407,
+                 from ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:29,
+                 from ../Core/Inc/main.h:30,
+                 from ../Core/Src/main.c:20:
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h:1945:19: note: declared here
+ 1945 | HAL_StatusTypeDef HAL_TIM_PWM_Start_IT(TIM_HandleTypeDef *htim, uint32_t Channel);
+      |                   ^~~~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:154:23: warning: unused variable 'dht11Data' [-Wunused-variable]
+  154 |         DHT11_TypeDef dht11Data;
+      |                       ^~~~~~~~~
+make: *** [Core/Src/subdir.mk:40: Core/Src/main.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+18:17:17 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:205:6: error: too few arguments to function 'HAL_TIM_PWM_Start_IT'
+  205 |   if(HAL_TIM_PWM_Start_IT(&htim3) != HAL_OK)
+      |      ^~~~~~~~~~~~~~~~~~~~
+In file included from ../Core/Inc/stm32f4xx_hal_conf.h:407,
+                 from ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:29,
+                 from ../Core/Inc/main.h:30,
+                 from ../Core/Src/main.c:20:
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h:1945:19: note: declared here
+ 1945 | HAL_StatusTypeDef HAL_TIM_PWM_Start_IT(TIM_HandleTypeDef *htim, uint32_t Channel);
+      |                   ^~~~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:154:23: warning: unused variable 'dht11Data' [-Wunused-variable]
+  154 |         DHT11_TypeDef dht11Data;
+      |                       ^~~~~~~~~
+make: *** [Core/Src/subdir.mk:40: Core/Src/main.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+18:17:48 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:154:23: warning: unused variable 'dht11Data' [-Wunused-variable]
+  154 |         DHT11_TypeDef dht11Data;
+      |                       ^~~~~~~~~
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  44300	    472	   4680	  49452	   c12c	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+18:19:02 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-size  smart_store_stm32.elf 
+   text	   data	    bss	    dec	    hex	filename
+  44300	    472	   4680	  49452	   c12c	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+18:25:23 **** Build of configuration Debug for project testBed ****
+make -j8 all 
+arm-none-eabi-size  testBed.elf 
+   text	   data	    bss	    dec	    hex	filename
+  30424	    468	   2132	  33024	   8100	testBed.elf
+Finished building: default.size.stdout
+ 
+18:26:15 **** Incremental Build of configuration Debug for project testBed ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c:40:22: warning: extra tokens at end of #endif directive [-Wendif-labels]
+   40 | #endif /* __GNUC__ */*/
+      |                      ^
+arm-none-eabi-gcc -o "testBed.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\testBed\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="testBed.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: testBed.elf
+ 
+arm-none-eabi-size  testBed.elf 
+arm-none-eabi-objdump -h -S testBed.elf  > "testBed.list"
+   text	   data	    bss	    dec	    hex	filename
+  29848	    468	   2132	  32448	   7ec0	testBed.elf
+Finished building: default.size.stdout
+ 
+Finished building: testBed.list
+ 
+18:28:22 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:155:23: warning: unused variable 'dht11Data' [-Wunused-variable]
+  155 |         DHT11_TypeDef dht11Data;
+      |                       ^~~~~~~~~
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  44300	    472	   4680	  49452	   c12c	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+18:29:33 **** Incremental Build of configuration Debug for project testBed ****
+make -j8 all 
+arm-none-eabi-size  testBed.elf 
+   text	   data	    bss	    dec	    hex	filename
+  29848	    468	   2132	  32448	   7ec0	testBed.elf
+Finished building: default.size.stdout
+ 
+18:29:54 **** Incremental Build of configuration Debug for project testBed ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c:40:22: warning: extra tokens at end of #endif directive [-Wendif-labels]
+   40 | #endif /* __GNUC__ */*/
+      |                      ^
+arm-none-eabi-gcc -o "testBed.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\testBed\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="testBed.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: testBed.elf
+ 
+arm-none-eabi-size  testBed.elf 
+arm-none-eabi-objdump -h -S testBed.elf  > "testBed.list"
+   text	   data	    bss	    dec	    hex	filename
+  29848	    468	   2132	  32448	   7ec0	testBed.elf
+Finished building: default.size.stdout
+ 
+Finished building: testBed.list
+ 
+18:30:04 **** Incremental Build of configuration Debug for project testBed ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c:40:22: warning: extra tokens at end of #endif directive [-Wendif-labels]
+   40 | #endif /* __GNUC__ */*/
+      |                      ^
+arm-none-eabi-gcc -o "testBed.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\testBed\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="testBed.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: testBed.elf
+ 
+arm-none-eabi-size  testBed.elf 
+arm-none-eabi-objdump -h -S testBed.elf  > "testBed.list"
+   text	   data	    bss	    dec	    hex	filename
+  29856	    468	   2132	  32456	   7ec8	testBed.elf
+Finished building: default.size.stdout
+ 
+Finished building: testBed.list
+ 
+18:30:25 **** Incremental Build of configuration Debug for project testBed ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c:40:22: warning: extra tokens at end of #endif directive [-Wendif-labels]
+   40 | #endif /* __GNUC__ */*/
+      |                      ^
+arm-none-eabi-gcc -o "testBed.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\testBed\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="testBed.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: testBed.elf
+ 
+arm-none-eabi-size  testBed.elf 
+arm-none-eabi-objdump -h -S testBed.elf  > "testBed.list"
+   text	   data	    bss	    dec	    hex	filename
+  29856	    468	   2132	  32456	   7ec8	testBed.elf
+Finished building: default.size.stdout
+ 
+Finished building: testBed.list
+ 
+18:31:49 **** Incremental Build of configuration Debug for project testBed ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c:40:22: warning: extra tokens at end of #endif directive [-Wendif-labels]
+   40 | #endif /* __GNUC__ */*/
+      |                      ^
+arm-none-eabi-gcc -o "testBed.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\testBed\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="testBed.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: testBed.elf
+ 
+arm-none-eabi-size  testBed.elf 
+arm-none-eabi-objdump -h -S testBed.elf  > "testBed.list"
+   text	   data	    bss	    dec	    hex	filename
+  29856	    468	   2132	  32456	   7ec8	testBed.elf
+Finished building: default.size.stdout
+ 
+Finished building: testBed.list
+ 
+18:45:02 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/stm32f4xx_hal_msp.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f4xx_hal_msp.d" -MT"Core/Src/stm32f4xx_hal_msp.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/stm32f4xx_hal_msp.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:255:52: error: 'servoState' undeclared (first use in this function); did you mean 'setstate'?
+  255 |             if ((tim3Sec % 2 == 0) && closeFlag && servoState == 1)
+      |                                                    ^~~~~~~~~~
+      |                                                    setstate
+../Core/Src/main.c:255:52: note: each undeclared identifier is reported only once for each function it appears in
+make: *** [Core/Src/subdir.mk:40: Core/Src/main.o] Error 1
+make: *** Waiting for unfinished jobs....
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+18:45:19 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  44996	    472	   4672	  50140	   c3dc	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+18:45:55 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  44996	    472	   4672	  50140	   c3dc	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+18:55:55 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:271:25: error: 'sendBuf' undeclared (first use in this function)
+  271 |                 sprintf(sendBuf, "[%s_DOOR]%s@%s\n", pArray[0], pArray[1], pArray[2]);
+      |                         ^~~~~~~
+../Core/Src/main.c:271:25: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/main.c:271:54: error: 'pArray' undeclared (first use in this function)
+  271 |                 sprintf(sendBuf, "[%s_DOOR]%s@%s\n", pArray[0], pArray[1], pArray[2]);
+      |                                                      ^~~~~~
+../Core/Src/main.c:152:19: warning: unused variable 'dht11Data' [-Wunused-variable]
+  152 |     DHT11_TypeDef dht11Data;
+      |                   ^~~~~~~~~
+make: *** [Core/Src/subdir.mk:40: Core/Src/main.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+18:56:26 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:272:54: error: 'pArray' undeclared (first use in this function)
+  272 |                 sprintf(sendBuf, "[%s_DOOR]%s@%s\n", pArray[0], pArray[1], pArray[2]);
+      |                                                      ^~~~~~
+../Core/Src/main.c:272:54: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/main.c:152:19: warning: unused variable 'dht11Data' [-Wunused-variable]
+  152 |     DHT11_TypeDef dht11Data;
+      |                   ^~~~~~~~~
+make: *** [Core/Src/subdir.mk:40: Core/Src/main.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+18:56:42 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:272:54: error: 'pArray' undeclared (first use in this function)
+  272 |                 sprintf(sendBuf, "[%s_DOOR]%s@%s\n", pArray[0], pArray[1], pArray[2]);
+      |                                                      ^~~~~~
+../Core/Src/main.c:272:54: note: each undeclared identifier is reported only once for each function it appears in
+make: *** [Core/Src/subdir.mk:40: Core/Src/main.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+18:57:04 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:272:13: error: expected ',' or ';' before 'char'
+  272 |             char sendBuf[MAX_UART_COMMAND_LEN] = {0};
+      |             ^~~~
+../Core/Src/main.c:274:25: error: 'sendBuf' undeclared (first use in this function)
+  274 |                 sprintf(sendBuf, "[%s_DOOR]%s@%s\n", pArray[0], pArray[1], pArray[2]);
+      |                         ^~~~~~~
+../Core/Src/main.c:274:25: note: each undeclared identifier is reported only once for each function it appears in
+make: *** [Core/Src/subdir.mk:40: Core/Src/main.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+18:57:30 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:272:13: error: expected ',' or ';' before 'static'
+  272 |             static char sendBuf[MAX_UART_COMMAND_LEN] = {0};
+      |             ^~~~~~
+../Core/Src/main.c:274:25: error: 'sendBuf' undeclared (first use in this function)
+  274 |                 sprintf(sendBuf, "[%s_DOOR]%s@%s\n", pArray[0], pArray[1], pArray[2]);
+      |                         ^~~~~~~
+../Core/Src/main.c:274:25: note: each undeclared identifier is reported only once for each function it appears in
+make: *** [Core/Src/subdir.mk:40: Core/Src/main.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+18:57:40 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  42740	    472	   4640	  47852	   baec	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+18:57:50 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  42772	    472	   4576	  47820	   bacc	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+18:58:03 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  42860	    472	   4576	  47908	   bb24	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+18:59:57 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  42820	    472	   4576	  47868	   bafc	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+19:00:46 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  44220	    472	   4672	  49364	   c0d4	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+19:02:49 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/esp.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/esp.d" -MT"Core/Src/esp.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/esp.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  44228	    472	   4672	  49372	   c0dc	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+19:03:49 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  44228	    472	   4672	  49372	   c0dc	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+19:11:58 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/esp.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/esp.d" -MT"Core/Src/esp.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/esp.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  44220	    472	   4672	  49364	   c0d4	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+19:52:38 **** Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/esp.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/esp.d" -MT"Core/Src/esp.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/esp.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  44220	    472	   4672	  49364	   c0d4	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+20:11:24 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:151:19: warning: unused variable 'dht11Data' [-Wunused-variable]
+  151 |     DHT11_TypeDef dht11Data;
+      |                   ^~~~~~~~~
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  44220	    472	   4672	  49364	   c0d4	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+20:11:58 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/esp.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/esp.d" -MT"Core/Src/esp.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/esp.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:151:19: warning: unused variable 'dht11Data' [-Wunused-variable]
+  151 |     DHT11_TypeDef dht11Data;
+      |                   ^~~~~~~~~
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  44220	    472	   4672	  49364	   c0d4	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+20:16:39 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:151:19: warning: unused variable 'dht11Data' [-Wunused-variable]
+  151 |     DHT11_TypeDef dht11Data;
+      |                   ^~~~~~~~~
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  44124	    472	   4672	  49268	   c074	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+20:18:12 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-size  smart_store_stm32.elf 
+   text	   data	    bss	    dec	    hex	filename
+  44124	    472	   4672	  49268	   c074	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+20:18:34 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:151:19: warning: unused variable 'dht11Data' [-Wunused-variable]
+  151 |     DHT11_TypeDef dht11Data;
+      |                   ^~~~~~~~~
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  44036	    472	   4672	  49180	   c01c	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+20:20:11 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  44780	    472	   4672	  49924	   c304	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+20:22:19 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'esp_event':
+../Core/Src/main.c:837:27: error: expected ';' before '}' token
+  837 |     esp_send_data(sendBuf)
+      |                           ^
+      |                           ;
+  838 | 
+  839 | }
+      | ~                          
+make: *** [Core/Src/subdir.mk:40: Core/Src/main.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+20:22:26 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  44796	    472	   4672	  49940	   c314	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+20:26:24 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  44828	    472	   4672	  49972	   c334	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+20:27:28 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/stm32f4xx_hal_msp.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f4xx_hal_msp.d" -MT"Core/Src/stm32f4xx_hal_msp.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/stm32f4xx_hal_msp.o"
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  44884	    472	   4672	  50028	   c36c	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+20:27:41 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-size  smart_store_stm32.elf 
+   text	   data	    bss	    dec	    hex	filename
+  44884	    472	   4672	  50028	   c36c	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+20:28:53 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "smart_store_stm32.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\workingspace\mini-project_smart-store\smart_strore_stm32\smart_store_stm32\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="smart_store_stm32.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: smart_store_stm32.elf
+ 
+arm-none-eabi-size  smart_store_stm32.elf 
+arm-none-eabi-objdump -h -S smart_store_stm32.elf  > "smart_store_stm32.list"
+   text	   data	    bss	    dec	    hex	filename
+  44980	    472	   4672	  50124	   c3cc	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+Finished building: smart_store_stm32.list
+ 
+20:30:14 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-size  smart_store_stm32.elf 
+   text	   data	    bss	    dec	    hex	filename
+  44980	    472	   4672	  50124	   c3cc	smart_store_stm32.elf
+Finished building: default.size.stdout
+ 
+20:35:03 **** Incremental Build of configuration Debug for project smart_store_stm32 ****
+make -j8 all 
+arm-none-eabi-size  smart_store_stm32.elf 
+   text	   data	    bss	    dec	    hex	filename
+  44980	    472	   4672	  50124	   c3cc	smart_store_stm32.elf
+Finished building: default.size.stdout
  
