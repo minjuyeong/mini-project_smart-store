@@ -13,6 +13,6 @@
 ../Core/Src/main.c:796:6:HAL_TIM_PeriodElapsedCallback	2
 ../Core/Src/main.c:808:6:map	1
 ../Core/Src/main.c:813:6:fanControl	2
-../Core/Src/main.c:821:6:ledControl	3
-../Core/Src/main.c:835:6:HAL_ADC_ConvCpltCallback	3
-../Core/Src/main.c:859:6:Error_Handler	1
+../Core/Src/main.c:823:6:ledControl	3
+../Core/Src/main.c:837:6:HAL_ADC_ConvCpltCallback	3
+../Core/Src/main.c:861:6:Error_Handler	1

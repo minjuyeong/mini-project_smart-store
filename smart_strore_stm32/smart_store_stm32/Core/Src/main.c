@@ -816,6 +816,7 @@ void fanControl(int fanSpeed)
     {
         __HAL_TIM_SetCompare(&htim4, TIM_CHANNEL_1, fanSpeed);
     }
+
 }
 
 void ledControl(int bright)
@@ -825,10 +826,6 @@ void ledControl(int bright)
 		ledState = bright;                               // 전역변수에 저장
 		int realLedState = map(bright, 0, 100, 0, 1000); // 써지는 실제값
 		__HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_1, realLedState);
-	}
-	else if(ledFlag)
-	{
-		__HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_1, 0);
 	}
 }
 

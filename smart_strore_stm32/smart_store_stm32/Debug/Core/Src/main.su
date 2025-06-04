@@ -13,6 +13,6 @@
 ../Core/Src/main.c:796:6:HAL_TIM_PeriodElapsedCallback	16	static
 ../Core/Src/main.c:808:6:map	24	static
 ../Core/Src/main.c:813:6:fanControl	16	static
-../Core/Src/main.c:821:6:ledControl	32	static
-../Core/Src/main.c:835:6:HAL_ADC_ConvCpltCallback	16	static
-../Core/Src/main.c:859:6:Error_Handler	4	static,ignoring_inline_asm
+../Core/Src/main.c:823:6:ledControl	32	static
+../Core/Src/main.c:837:6:HAL_ADC_ConvCpltCallback	16	static
+../Core/Src/main.c:861:6:Error_Handler	4	static,ignoring_inline_asm
