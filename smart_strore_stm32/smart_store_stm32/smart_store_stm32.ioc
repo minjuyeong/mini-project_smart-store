@@ -1,11 +1,15 @@
 #MicroXplorer Configuration settings - do not modify
-ADC1.Channel-11\#ChannelRegularConversion=ADC_CHANNEL_1
+ADC1.Channel-11\#ChannelRegularConversion=ADC_CHANNEL_0
+ADC1.Channel-12\#ChannelRegularConversion=ADC_CHANNEL_1
 ADC1.DataAlign=ADC_DATAALIGN_RIGHT
-ADC1.IPParameters=Rank-11\#ChannelRegularConversion,master,Channel-11\#ChannelRegularConversion,SamplingTime-11\#ChannelRegularConversion,NbrOfConversionFlag,NbrOfConversion,DataAlign
-ADC1.NbrOfConversion=1
+ADC1.IPParameters=Rank-11\#ChannelRegularConversion,master,Channel-11\#ChannelRegularConversion,SamplingTime-11\#ChannelRegularConversion,NbrOfConversionFlag,NbrOfConversion,DataAlign,ScanConvMode,Rank-12\#ChannelRegularConversion,Channel-12\#ChannelRegularConversion,SamplingTime-12\#ChannelRegularConversion
+ADC1.NbrOfConversion=2
 ADC1.NbrOfConversionFlag=1
 ADC1.Rank-11\#ChannelRegularConversion=1
-ADC1.SamplingTime-11\#ChannelRegularConversion=ADC_SAMPLETIME_3CYCLES
+ADC1.Rank-12\#ChannelRegularConversion=2
+ADC1.SamplingTime-11\#ChannelRegularConversion=ADC_SAMPLETIME_84CYCLES
+ADC1.SamplingTime-12\#ChannelRegularConversion=ADC_SAMPLETIME_84CYCLES
+ADC1.ScanConvMode=ENABLE
 ADC1.master=1
 CAD.formats=
 CAD.pinconfig=
@@ -60,6 +64,7 @@ Mcu.UserConstants=
 Mcu.UserName=STM32F411RETx
 MxCube.Version=6.14.1
 MxDb.Version=DB.6.0.141
+NVIC.ADC_IRQn=true\:0\:0\:false\:false\:true\:true\:true\:true
 NVIC.BusFault_IRQn=true\:0\:0\:false\:false\:true\:true\:false\:false
 NVIC.DebugMonitor_IRQn=true\:0\:0\:false\:false\:true\:true\:false\:false
 NVIC.EXTI0_IRQn=true\:0\:0\:false\:false\:true\:true\:true\:true

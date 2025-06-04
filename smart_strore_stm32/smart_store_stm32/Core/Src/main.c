@@ -57,12 +57,12 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-ADC_HandleTypeDef hadc1;	//adc용 구조체 변수, 적외선 센서에 할당
+ADC_HandleTypeDef hadc1;
 
-TIM_HandleTypeDef htim1;	//
-TIM_HandleTypeDef htim2;	//
-TIM_HandleTypeDef htim3;	//
-TIM_HandleTypeDef htim4;	//
+TIM_HandleTypeDef htim1;
+TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim3;
+TIM_HandleTypeDef htim4;
 
 UART_HandleTypeDef huart2;
 UART_HandleTypeDef huart6;
@@ -95,8 +95,15 @@ uint8_t Is_First_Captured = 0;  // is the first value captured ?
 
 int pulseWidth = 0;
 
-unsigned long debounceDelay = 10;	//10ms
-unsigned long lastDebounceTime = 0;
+
+typedef struct
+{
+	float distance;
+	uint32_t sensorReadTime;
+} Data;
+
+Data outDoorSensor = {0.0, 0};
+Data inDoorSensor  = {0.0, 0};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -119,11 +126,12 @@ long map(long x, long in_min, long in_max, long out_min, long out_max);
 void fanControl(int fanSpeed);	//fan 회전수를 변경하는 함수
 void ledControl(int ledState);
 
-int infraredSensor();	//적외선 센서 데이터
+//int infraredSensor();	//적외선 센서 데이터
 
-uint32_t Read_ADC_Channel(uint32_t channel);
-
-
+//uint32_t Read_ADC_Channel(uint32_t channel);
+__IO uint16_t ADC1ConvertValue[2]={0};
+__IO int adcFlag = 0;
+int closeFlag = 0;
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -185,7 +193,11 @@ int main(void)
 
   if(HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1) != HAL_OK)
 	  Error_Handler();
-  if(HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1) != HAL_OK)
+  if(HAL_TIM_Base_Start_IT(&htim2) != HAL_OK)
+	  Error_Handler();
+  if(HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1) != HAL_OK)
+	  Error_Handler();
+  if(HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2) != HAL_OK)
 	  Error_Handler();
   if(HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1) != HAL_OK)
 	  Error_Handler();
@@ -197,7 +209,6 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  lastDebounceTime = HAL_GetTick();
   while (1)
   {
 //	    int infraredSensorData = infraredSensor();	//출입문 적외선센서 값
@@ -246,7 +257,24 @@ int main(void)
 //					__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 1500);
 				}
 			}
+			if(!(tim3Sec%2))
+			{
+				if (closeFlag)
+				{
+					__HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_1, 1300);
+					closeFlag = 0;
+				}
+			}
 		}
+		//outdoorsensor 거리 변환
+		float voltage = (ADC1ConvertValue[0] / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
+		outDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
+		printf("out distance : %f\r\n", outDoorSensor.distance);
+
+		//indoorsensor 거리 변환
+		voltage = (ADC1ConvertValue[1] / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
+		inDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
+		printf("in distance : %f\r\n", inDoorSensor.distance);
 //	  if((HAL_GetTick() - lastDebounceTime) > debounceDelay)
 //	  {
 //		// 자동문열기
@@ -269,6 +297,14 @@ int main(void)
 //			customerCount++;
 //		}
 //	  }
+  	  if(adcFlag && !closeFlag)
+  	  {
+  		  if(outDoorSensor.distance < 20 || inDoorSensor.distance < 20)
+  		  {
+  			__HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_1, 1700);
+  			closeFlag = 1;
+  		  }
+  	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -344,13 +380,13 @@ static void MX_ADC1_Init(void)
   hadc1.Instance = ADC1;
   hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
-  hadc1.Init.ScanConvMode = DISABLE;
+  hadc1.Init.ScanConvMode = ENABLE;
   hadc1.Init.ContinuousConvMode = DISABLE;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.NbrOfConversion = 1;
+  hadc1.Init.NbrOfConversion = 2;
   hadc1.Init.DMAContinuousRequests = DISABLE;
   hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
@@ -360,21 +396,24 @@ static void MX_ADC1_Init(void)
 
   /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
   */
-  sConfig.Channel = ADC_CHANNEL_1;
+  sConfig.Channel = ADC_CHANNEL_0;
   sConfig.Rank = 1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+  sConfig.SamplingTime = ADC_SAMPLETIME_84CYCLES;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_1;
+  sConfig.Rank = 2;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
   }
   /* USER CODE BEGIN ADC1_Init 2 */
-  sConfig.Channel = ADC_CHANNEL_2;
-  sConfig.Rank = 1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
+
   /* USER CODE END ADC1_Init 2 */
 
 }
@@ -832,19 +871,19 @@ void esp_event(char * recvBuf)
 		  sprintf(sendBuf, "[%s]%s@%d\n", pArray[0], pArray[1], atoi(pArray[2]));
 	  }
   }
-  else if (!strcmp(pArray[1], "SERVO"))
-  {
-	  if (!strcmp(pArray[2], "ON"))
-	  {
-		  __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 2500-1);
-		  sprintf(sendBuf, "[%s]%s@%s\n", pArray[0], pArray[1], pArray[2]);
-	  }
-	  else if(!strcmp(pArray[2], "OFF"))
-	  {
-		  __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 1500-1);
-		  sprintf(sendBuf, "[%s]%s@%s\n", pArray[0], pArray[1], pArray[2]);
-	  }
-  }
+//  else if (!strcmp(pArray[1], "SERVO"))
+//  {
+//	  if (!strcmp(pArray[2], "ON"))
+//	  {
+//		  __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 2500-1);
+//		  sprintf(sendBuf, "[%s]%s@%s\n", pArray[0], pArray[1], pArray[2]);
+//	  }
+//	  else if(!strcmp(pArray[2], "OFF"))
+//	  {
+//		  __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 1500-1);
+//		  sprintf(sendBuf, "[%s]%s@%s\n", pArray[0], pArray[1], pArray[2]);
+//	  }
+//  }
   else if(!strncmp(pArray[1]," New conn",8))
   {
 //	   printf("Debug : %s, %s\r\n",pArray[0],pArray[1]);
@@ -893,39 +932,55 @@ void ledControl(int bright)
 	__HAL_TIM_SetCompare(&htim1,TIM_CHANNEL_1, realLedState);
 }
 
-int infraredSensor(void)
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
-   typedef struct
-   {
-	   float distance;
-	   uint32_t sensorReadTime;
-   } Data;
+	static int channel = 0;
+	if (channel == 0)
+	{
+		ADC1ConvertValue[channel] = HAL_ADC_GetValue(hadc);
+		channel = 1;
+	}
+	else if(channel == 1)
+	{
+		ADC1ConvertValue[channel]= HAL_ADC_GetValue(hadc);
+		channel = 0;
+		adcFlag = 1;
+	}
 
-   Data outDoorSensor = {0.0, 0};
-   Data inDoorSensor  = {0.0, 0};
-   uint32_t adcValue;
 
-   outDoorSensor.sensorReadTime = HAL_GetTick();
-   inDoorSensor.sensorReadTime = HAL_GetTick();
-
-   adcValue = Read_ADC_Channel(ADC_CHANNEL_0);
-   // adc chennel1 값을 전압으로 변환
-   float voltage = (adcValue / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
-   // outDoorSensor 거리 계산 (센서의 특성에 따라 조정)
-   outDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
-
-   adcValue = Read_ADC_Channel(ADC_CHANNEL_1);
-   // adc chennel1 값을 전압으로 변환
-   voltage = (adcValue / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
-   // inDoorSensor 거리 계산 (센서의 특성에 따라 조정)
-   inDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
-
-  if(outDoorSensor.distance < 10 || inDoorSensor.distance < 10)
-  {
-	  printf("outDoorSensor : %f\r\n", outDoorSensor.distance);
-	  printf("inDoorSensor : %f\r\n", inDoorSensor.distance);
-	  return 10;	//문열림 코드 10
-  }
+}
+//int infraredSensor(void)
+//{
+//   typedef struct
+//   {
+//	   float distance;
+//	   uint32_t sensorReadTime;
+//   } Data;
+//
+//   Data outDoorSensor = {0.0, 0};
+//   Data inDoorSensor  = {0.0, 0};
+//   uint32_t adcValue;
+//   outDoorSensor.sensorReadTime = HAL_GetTick();
+//   inDoorSensor.sensorReadTime = HAL_GetTick();
+//
+//   adcValue = Read_ADC_Channel(ADC_CHANNEL_0);
+//   // adc chennel1 값을 전압으로 변환
+//   float voltage = (adcValue / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
+//   // outDoorSensor 거리 계산 (센서의 특성에 따라 조정)
+//   outDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
+//
+//   adcValue = Read_ADC_Channel(ADC_CHANNEL_1);
+//   // adc chennel1 값을 전압으로 변환
+//   voltage = (adcValue / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
+//   // inDoorSensor 거리 계산 (센서의 특성에 따라 조정)
+//   inDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
+//
+//  if(outDoorSensor.distance < 10 || inDoorSensor.distance < 10)
+//  {
+//	  printf("outDoorSensor : %f\r\n", outDoorSensor.distance);
+//	  printf("inDoorSensor : %f\r\n", inDoorSensor.distance);
+//	  return 10;	//문열림 코드 10
+//  }
 //  else if((outDoorSensor.sensorReadTime > inDoorSensor.sensorReadTime))
 //  {
 //	  printf("outDoorSensor : %f\r\n", outDoorSensor.distance);
@@ -938,20 +993,7 @@ int infraredSensor(void)
 //	  printf("inDoorSensor : %f\r\n", inDoorSensor.distance);
 //	  return 30; 	//손님 수 증가 코드 30
 //  }
-}
 
-uint32_t Read_ADC_Channel(uint32_t channel) {
-    ADC_ChannelConfTypeDef sConfig = {0};
-
-    sConfig.Channel = channel;
-    sConfig.Rank = 1;
-    sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES; // 샘플링 시간 설정
-    HAL_ADC_ConfigChannel(&hadc1, &sConfig);
-
-    HAL_ADC_Start(&hadc1); // ADC 변환 시작
-    HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY); // 변환 완료 대기
-    return HAL_ADC_GetValue(&hadc1); // 변환된 값 반환
-}
 /* USER CODE END 4 */
 
 /**
