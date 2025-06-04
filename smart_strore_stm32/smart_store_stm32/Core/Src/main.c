@@ -25,9 +25,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <math.h>
-#include "esp.h"
-#include "dht.h"
+#include <math.h>	//pow() 연산시 필요
+#include "esp.h"	//wifi 모듈 헤더
+#include "dht.h"	//온습도 센서 헤더
 //#include "clcd.h"
 /* USER CODE END Includes */
 
@@ -38,9 +38,10 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define ARR_CNT 5
-#define CMD_SIZE 50
+#define ARR_CNT 20	//pArray에 사용되는 크기 [@]에 의해 구별되는 명령의 크기
+#define CMD_SIZE 50	//명령의 전체 사이즈
 
+//디버깅용 printf 사용을 위한 구문
 #ifdef __GNUC__
 /* With GCC, small printf (option LD Linker->Libraries->Small printf
    set to 'Yes') calls __io_putchar() */
@@ -56,12 +57,12 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-ADC_HandleTypeDef hadc1;
+ADC_HandleTypeDef hadc1;	//adc용 구조체 변수, 적외선 센서에 할당
 
-TIM_HandleTypeDef htim1;
-TIM_HandleTypeDef htim2;
-TIM_HandleTypeDef htim3;
-TIM_HandleTypeDef htim4;
+TIM_HandleTypeDef htim1;	//
+TIM_HandleTypeDef htim2;	//
+TIM_HandleTypeDef htim3;	//
+TIM_HandleTypeDef htim4;	//
 
 UART_HandleTypeDef huart2;
 UART_HandleTypeDef huart6;
@@ -94,6 +95,8 @@ uint8_t Is_First_Captured = 0;  // is the first value captured ?
 
 int pulseWidth = 0;
 
+unsigned long debounceDelay = 10;	//10ms
+unsigned long lastDebounceTime = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -138,7 +141,7 @@ int main(void)
   /* USER CODE BEGIN 1 */
 	int ret = 0;
 	DHT11_TypeDef dht11Data;
-	bool servoFlag = 0;
+//	bool servoFlag = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -182,7 +185,8 @@ int main(void)
 
   if(HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1) != HAL_OK)
 	  Error_Handler();
-
+  if(HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1) != HAL_OK)
+	  Error_Handler();
   if(HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1) != HAL_OK)
 	  Error_Handler();
 
@@ -193,9 +197,10 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  lastDebounceTime = HAL_GetTick();
   while (1)
   {
-	    int infraredSensorData = infraredSensor();	//출입문 적외선센서 값
+//	    int infraredSensorData = infraredSensor();	//출입문 적외선센서 값
 
 		if(strstr((char *)cb_data.buf,"+IPD") && cb_data.buf[cb_data.length-1] == '\n')
 		{
@@ -235,38 +240,39 @@ int main(void)
 				}
 				else
 					printf("DHT11 response error\r\n");
-				if (servoFlag)
-					servoFlag = 0;
+//				if (servoFlag)
+//				{
+//					servoFlag = 0;
+//					__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 1500);
+				}
 			}
 		}
-
-		// 자동문열기
-		if(infraredSensorData == 10)	//문열기 코드 10
-		{
-			//문 열기 코드
-			servoFlag = 1;
-			while(pulseWidth < 1700)
-			{
-				__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, pulseWidth - 1);
-				pulseWidth++;
-				HAL_Delay(15);
-			}
-			printf("motor on\r\n");
-		}
-
-		//손님 수 카운트 코드
-		if(infraredSensorData == 20)	//손님 수 감소 코드 20
-		{
-			customerCount--;
-		}
-		else if(infraredSensorData == 30)	//손님 수 증가 코드 30
-		{
-			customerCount++;
-		}
+//	  if((HAL_GetTick() - lastDebounceTime) > debounceDelay)
+//	  {
+//		// 자동문열기
+//		if(!servoFlag && infraredSensorData == 10)	//문열기 코드 10
+//		{
+//			//문 열기 코드
+//			servoFlag = 1;
+//			__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 1700);
+//			HAL_Delay(15);
+//			printf("motor on\r\n");
+//		}
+//
+//		//손님 수 카운트 코드
+//		if(infraredSensorData == 20)	//손님 수 감소 코드 20
+//		{
+//			customerCount--;
+//		}
+//		else if(infraredSensorData == 30)	//손님 수 증가 코드 30
+//		{
+//			customerCount++;
+//		}
+//	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-  }
+//  }
   /* USER CODE END 3 */
 }
 
@@ -493,7 +499,7 @@ static void MX_TIM2_Init(void)
     Error_Handler();
   }
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 500-1;
+  sConfigOC.Pulse = 0;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
@@ -826,6 +832,19 @@ void esp_event(char * recvBuf)
 		  sprintf(sendBuf, "[%s]%s@%d\n", pArray[0], pArray[1], atoi(pArray[2]));
 	  }
   }
+  else if (!strcmp(pArray[1], "SERVO"))
+  {
+	  if (!strcmp(pArray[2], "ON"))
+	  {
+		  __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 2500-1);
+		  sprintf(sendBuf, "[%s]%s@%s\n", pArray[0], pArray[1], pArray[2]);
+	  }
+	  else if(!strcmp(pArray[2], "OFF"))
+	  {
+		  __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 1500-1);
+		  sprintf(sendBuf, "[%s]%s@%s\n", pArray[0], pArray[1], pArray[2]);
+	  }
+  }
   else if(!strncmp(pArray[1]," New conn",8))
   {
 //	   printf("Debug : %s, %s\r\n",pArray[0],pArray[1]);
@@ -876,49 +895,49 @@ void ledControl(int bright)
 
 int infraredSensor(void)
 {
-  typedef struct
-  {
-	  float distance;
-	  uint32_t sensorReadTime;
-  } Data;
+   typedef struct
+   {
+	   float distance;
+	   uint32_t sensorReadTime;
+   } Data;
 
-  Data outDoorSensor = {0.0, 0};
-  Data inDoorSensor  = {0.0, 0};
+   Data outDoorSensor = {0.0, 0};
+   Data inDoorSensor  = {0.0, 0};
+   uint32_t adcValue;
 
-   uint32_t adcValue = Read_ADC_Channel(ADC_CHANNEL_0);
    outDoorSensor.sensorReadTime = HAL_GetTick();
+   inDoorSensor.sensorReadTime = HAL_GetTick();
+
+   adcValue = Read_ADC_Channel(ADC_CHANNEL_0);
    // adc chennel1 값을 전압으로 변환
    float voltage = (adcValue / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
-
    // outDoorSensor 거리 계산 (센서의 특성에 따라 조정)
    outDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
 
    adcValue = Read_ADC_Channel(ADC_CHANNEL_1);
-   inDoorSensor.sensorReadTime = HAL_GetTick();
    // adc chennel1 값을 전압으로 변환
    voltage = (adcValue / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
-
-   // outDoorSensor 거리 계산 (센서의 특성에 따라 조정)
+   // inDoorSensor 거리 계산 (센서의 특성에 따라 조정)
    inDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
 
-  if(outDoorSensor.distance < 30 || inDoorSensor.distance < 30)
+  if(outDoorSensor.distance < 10 || inDoorSensor.distance < 10)
   {
 	  printf("outDoorSensor : %f\r\n", outDoorSensor.distance);
 	  printf("inDoorSensor : %f\r\n", inDoorSensor.distance);
 	  return 10;	//문열림 코드 10
   }
-  else if(outDoorSensor.sensorReadTime > inDoorSensor.sensorReadTime)
-  {
-	  printf("outDoorSensor : %f\r\n", outDoorSensor.distance);
-	  printf("inDoorSensor : %f\r\n", inDoorSensor.distance);
-	  return 20;	//손님 수 줄어듬 코드 20
-  }
-  else if(inDoorSensor.sensorReadTime > outDoorSensor.sensorReadTime)
-  {
-	  printf("outDoorSensor : %f\r\n", outDoorSensor.distance);
-	  printf("inDoorSensor : %f\r\n", inDoorSensor.distance);
-	  return 30; 	//손님 수 증가 코드 30
-  }
+//  else if((outDoorSensor.sensorReadTime > inDoorSensor.sensorReadTime))
+//  {
+//	  printf("outDoorSensor : %f\r\n", outDoorSensor.distance);
+//	  printf("inDoorSensor : %f\r\n", inDoorSensor.distance);
+//	  return 20;	//손님 수 줄어듬 코드 20
+//  }
+//  else if(inDoorSensor.sensorReadTime > outDoorSensor.sensorReadTime)
+//  {
+//	  printf("outDoorSensor : %f\r\n", outDoorSensor.distance);
+//	  printf("inDoorSensor : %f\r\n", inDoorSensor.distance);
+//	  return 30; 	//손님 수 증가 코드 30
+//  }
 }
 
 uint32_t Read_ADC_Channel(uint32_t channel) {
