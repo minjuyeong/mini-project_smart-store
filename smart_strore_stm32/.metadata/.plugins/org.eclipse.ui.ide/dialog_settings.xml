@@ -10,6 +10,7 @@
 			<item value="C:\workingspace\mini-project_smart-store\smart_strore_stm32\nucleo_f411re_uart2_printf_uart6_wifi_clcd_dht11_tim4pwm1_servo_tim3rgbLed"/>
 		</list>
 		<list key="WizardProjectsImportPage.STORE_ARCHIVES">
+			<item value="Z:\cortexM4_stm32_nucleo_F411RE\Examples\tim4_pwm1_button_servo_ksh_adc.zip"/>
 			<item value="Z:\cortexM4_stm32_nucleo_F411RE\Examples\nucleo_f411re_uart2_printf_uart6_wifi.zip"/>
 			<item value="C:\Users\INTEL07\Desktop\22.zip"/>
 		</list>

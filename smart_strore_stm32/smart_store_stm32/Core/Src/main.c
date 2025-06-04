@@ -95,6 +95,10 @@ uint8_t Is_First_Captured = 0;  // is the first value captured ?
 
 int pulseWidth = 0;
 
+//uint32_t Read_ADC_Channel(uint32_t channel);
+__IO uint16_t ADC1ConvertValue[2]={0};
+__IO int adcFlag = 0;
+int closeFlag = 1;
 
 typedef struct
 {
@@ -128,10 +132,7 @@ void ledControl(int ledState);
 
 //int infraredSensor();	//적외선 센서 데이터
 
-//uint32_t Read_ADC_Channel(uint32_t channel);
-__IO uint16_t ADC1ConvertValue[2]={0};
-__IO int adcFlag = 0;
-int closeFlag = 0;
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -197,14 +198,11 @@ int main(void)
 	  Error_Handler();
   if(HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1) != HAL_OK)
 	  Error_Handler();
-  if(HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2) != HAL_OK)
-	  Error_Handler();
   if(HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1) != HAL_OK)
 	  Error_Handler();
 
   if(HAL_TIM_PWM_Start(&htim4,TIM_CHANNEL_1) != HAL_OK)
 	  Error_Handler();
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -212,7 +210,8 @@ int main(void)
   while (1)
   {
 //	    int infraredSensorData = infraredSensor();	//출입문 적외선센서 값
-
+	  	if(HAL_ADC_Start_IT(&hadc1) != HAL_OK)
+		    Error_Handler();
 		if(strstr((char *)cb_data.buf,"+IPD") && cb_data.buf[cb_data.length-1] == '\n')
 		{
 			//?��?��?���??  \r\n+IPD,15:[KSH_LIN]HELLO\n
@@ -261,56 +260,36 @@ int main(void)
 			{
 				if (closeFlag)
 				{
-					__HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_1, 1300);
+					__HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_1, 1500);
 					closeFlag = 0;
 				}
 			}
-		}
+//		printf("adc1 ch0 : %d\r\n", ADC1ConvertValue[0]);
+//		printf("adc1 ch1 : %d\r\n", ADC1ConvertValue[1]);
 		//outdoorsensor 거리 변환
 		float voltage = (ADC1ConvertValue[0] / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
+		if (voltage < 0.1f) voltage = 0.1f;
 		outDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
-		printf("out distance : %f\r\n", outDoorSensor.distance);
+//		printf("out distance : %f\r\n", outDoorSensor.distance);
 
 		//indoorsensor 거리 변환
 		voltage = (ADC1ConvertValue[1] / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
+		if (voltage < 0.1f) voltage = 0.1f;
 		inDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
 		printf("in distance : %f\r\n", inDoorSensor.distance);
-//	  if((HAL_GetTick() - lastDebounceTime) > debounceDelay)
-//	  {
-//		// 자동문열기
-//		if(!servoFlag && infraredSensorData == 10)	//문열기 코드 10
-//		{
-//			//문 열기 코드
-//			servoFlag = 1;
-//			__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 1700);
-//			HAL_Delay(15);
-//			printf("motor on\r\n");
-//		}
-//
-//		//손님 수 카운트 코드
-//		if(infraredSensorData == 20)	//손님 수 감소 코드 20
-//		{
-//			customerCount--;
-//		}
-//		else if(infraredSensorData == 30)	//손님 수 증가 코드 30
-//		{
-//			customerCount++;
-//		}
-//	  }
-  	  if(adcFlag && !closeFlag)
-  	  {
-  		  if(outDoorSensor.distance < 20 || inDoorSensor.distance < 20)
-  		  {
-  			__HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_1, 1700);
-  			closeFlag = 1;
-  		  }
-  	  }
-    /* USER CODE END WHILE */
+		printf("out distance : %f\r\n", outDoorSensor.distance);
 
+		if((outDoorSensor.distance <= 20.0 || inDoorSensor.distance <= 20.0)  && !closeFlag)
+		{
+			__HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_1, 1700);
+			closeFlag = 1;
+		}
+    /* USER CODE END WHILE */
+  }
     /* USER CODE BEGIN 3 */
-//  }
   /* USER CODE END 3 */
 }
+
 
 /**
   * @brief System Clock Configuration
@@ -871,19 +850,19 @@ void esp_event(char * recvBuf)
 		  sprintf(sendBuf, "[%s]%s@%d\n", pArray[0], pArray[1], atoi(pArray[2]));
 	  }
   }
-//  else if (!strcmp(pArray[1], "SERVO"))
-//  {
-//	  if (!strcmp(pArray[2], "ON"))
-//	  {
-//		  __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 2500-1);
-//		  sprintf(sendBuf, "[%s]%s@%s\n", pArray[0], pArray[1], pArray[2]);
-//	  }
-//	  else if(!strcmp(pArray[2], "OFF"))
-//	  {
-//		  __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 1500-1);
-//		  sprintf(sendBuf, "[%s]%s@%s\n", pArray[0], pArray[1], pArray[2]);
-//	  }
-//  }
+  else if (!strcmp(pArray[1], "SERVO"))
+  {
+	  if (!strcmp(pArray[2], "ON"))
+	  {
+		  __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 1700);
+		  sprintf(sendBuf, "[%s]%s@%s\n", pArray[0], pArray[1], pArray[2]);
+	  }
+	  else if(!strcmp(pArray[2], "OFF"))
+	  {
+		  __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 1500);
+		  sprintf(sendBuf, "[%s]%s@%s\n", pArray[0], pArray[1], pArray[2]);
+	  }
+  }
   else if(!strncmp(pArray[1]," New conn",8))
   {
 //	   printf("Debug : %s, %s\r\n",pArray[0],pArray[1]);
@@ -934,6 +913,7 @@ void ledControl(int bright)
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
+//	printf("check");
 	static int channel = 0;
 	if (channel == 0)
 	{
@@ -946,8 +926,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 		channel = 0;
 		adcFlag = 1;
 	}
-
-
+	printf("ch1 : %d , ch2 : %d\r\n", ADC1ConvertValue[0], ADC1ConvertValue[1]);
 }
 //int infraredSensor(void)
 //{
@@ -1007,6 +986,7 @@ void Error_Handler(void)
   __disable_irq();
   while (1)
   {
+	  printf("error\r\n");
   }
   /* USER CODE END Error_Handler_Debug */
 }
