@@ -41,6 +41,13 @@
 #define ARR_CNT 5
 #define CMD_SIZE 50
 
+#ifdef __GNUC__
+/* With GCC, small printf (option LD Linker->Libraries->Small printf
+   set to 'Yes') calls __io_putchar() */
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif /* __GNUC__ */
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -85,6 +92,8 @@ uint32_t IC_Val2 = 0;
 uint32_t Difference = 0;
 uint8_t Is_First_Captured = 0;  // is the first value captured ?
 
+int pulseWidth = 0;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -111,6 +120,7 @@ int infraredSensor();	//적외선 센서 데이터
 
 uint32_t Read_ADC_Channel(uint32_t channel);
 
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -128,6 +138,7 @@ int main(void)
   /* USER CODE BEGIN 1 */
 	int ret = 0;
 	DHT11_TypeDef dht11Data;
+	bool servoFlag = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -224,6 +235,8 @@ int main(void)
 				}
 				else
 					printf("DHT11 response error\r\n");
+				if (servoFlag)
+					servoFlag = 0;
 			}
 		}
 
@@ -231,8 +244,14 @@ int main(void)
 		if(infraredSensorData == 10)	//문열기 코드 10
 		{
 			//문 열기 코드
-			int pulseWidth = 1700;
-			__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, pulseWidth - 1);
+			servoFlag = 1;
+			while(pulseWidth < 1700)
+			{
+				__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, pulseWidth - 1);
+				pulseWidth++;
+				HAL_Delay(15);
+			}
+			printf("motor on\r\n");
 		}
 
 		//손님 수 카운트 코드
@@ -733,6 +752,15 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+//PUTCHAR_PROTOTYPE
+//{
+//  /* Place your implementation of fputc here */
+//  /* e.g. write a character to the USART6 and Loop until the end of transmission */
+//  HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 0xFFFF);
+//
+//  return ch;
+//}
+
 void MX_GPIO_LED_ON(int pin)
 {
 	HAL_GPIO_WritePin(LD2_GPIO_Port, pin, GPIO_PIN_SET);
@@ -875,14 +903,20 @@ int infraredSensor(void)
 
   if(outDoorSensor.distance < 30 || inDoorSensor.distance < 30)
   {
+	  printf("outDoorSensor : %f\r\n", outDoorSensor.distance);
+	  printf("inDoorSensor : %f\r\n", inDoorSensor.distance);
 	  return 10;	//문열림 코드 10
   }
   else if(outDoorSensor.sensorReadTime > inDoorSensor.sensorReadTime)
   {
+	  printf("outDoorSensor : %f\r\n", outDoorSensor.distance);
+	  printf("inDoorSensor : %f\r\n", inDoorSensor.distance);
 	  return 20;	//손님 수 줄어듬 코드 20
   }
   else if(inDoorSensor.sensorReadTime > outDoorSensor.sensorReadTime)
   {
+	  printf("outDoorSensor : %f\r\n", outDoorSensor.distance);
+	  printf("inDoorSensor : %f\r\n", inDoorSensor.distance);
 	  return 30; 	//손님 수 증가 코드 30
   }
 }
