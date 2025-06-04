@@ -15,7 +15,7 @@
 #define PASS "embA1234"
 #define LOGID "A"
 #define PASSWD "PASSWD"
-#define DST_IP "10.10.141.67"
+#define DST_IP "10.10.141.68"
 #define DST_PORT 5000
 
 typedef struct _cb_data_t

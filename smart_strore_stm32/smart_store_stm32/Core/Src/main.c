@@ -24,10 +24,10 @@
 #include "dht.h"  //온습도 센서 헤더
 #include "esp.h"  //wifi 모듈 헤더
 #include <math.h> //pow() 연산시 필요
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <stdbool.h>	//bool 타입
+#include <stdio.h>	//printf를 위한 디버깅 헤더
+#include <stdlib.h>	//메모리 연산
+#include <string.h>	//문자열 연산
 // #include "clcd.h"
 /* USER CODE END Includes */
 
@@ -60,7 +60,6 @@
 ADC_HandleTypeDef hadc1;
 
 TIM_HandleTypeDef htim1;
-TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim4;
 
@@ -81,19 +80,13 @@ char temp[10];         // 온도는, 소수점 앞뒤로 따로 저장되므로 
 int customerCount = 0; // 현재 매장 내 손님 수 저장(인체감지 센서)
 int ledState;          // led(조명의 밝기) 저장
 int fanSpeed = 0;      // ez모터의 회전수 저장	//0~1000
-bool lockState;        // true면 lock faluse 면 off
 
 // 각 장치의 작동 가능 플래그, 각 플래그들이 true면 값을 수정할 수 있다.
 // allstop 명
 bool fanFlag = false;
+bool ledFlag = false;
+bool lockFlag;        // true면 lock faluse 면 off
 
-// 초음파 센서 관련 변수
-uint32_t IC_Val1 = 0;
-uint32_t IC_Val2 = 0;
-uint32_t Difference = 0;
-uint8_t Is_First_Captured = 0; // is the first value captured ?
-
-int pulseWidth = 0;
 
 __IO uint16_t ADC1ConvertValue[2] = {0};
 __IO int adcFlag = 0;
@@ -119,7 +112,6 @@ static void MX_TIM4_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_TIM1_Init(void);
 static void MX_ADC1_Init(void);
-static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 char strBuff[MAX_ESP_COMMAND_LEN];
 void MX_GPIO_LED_ON(int flag);
@@ -176,7 +168,6 @@ int main(void)
   MX_TIM3_Init();
   MX_TIM1_Init();
   MX_ADC1_Init();
-  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
     printf("Start main() - wifi\r\n");
     ret |= drv_uart_init();
@@ -192,10 +183,6 @@ int main(void)
     DHT11_Init();
 
     if (HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1) != HAL_OK)
-        Error_Handler();
-    if (HAL_TIM_Base_Start_IT(&htim2) != HAL_OK)
-        Error_Handler();
-    if (HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1) != HAL_OK)
         Error_Handler();
     if (HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1) != HAL_OK)
         Error_Handler();
@@ -251,6 +238,7 @@ int main(void)
                     printf("DHT11 response error\r\n");
             }
         }
+
         // outdoorsensor 거리 변환
         float voltage = (ADC1ConvertValue[0] / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
         if (voltage < 0.1f)
@@ -459,65 +447,6 @@ static void MX_TIM1_Init(void)
 
   /* USER CODE END TIM1_Init 2 */
   HAL_TIM_MspPostInit(&htim1);
-
-}
-
-/**
-  * @brief TIM2 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_TIM2_Init(void)
-{
-
-  /* USER CODE BEGIN TIM2_Init 0 */
-
-  /* USER CODE END TIM2_Init 0 */
-
-  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
-  TIM_MasterConfigTypeDef sMasterConfig = {0};
-  TIM_OC_InitTypeDef sConfigOC = {0};
-
-  /* USER CODE BEGIN TIM2_Init 1 */
-
-  /* USER CODE END TIM2_Init 1 */
-  htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 84-1;
-  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 20000-1;
-  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
-  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 0;
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM2_Init 2 */
-
-  /* USER CODE END TIM2_Init 2 */
-  HAL_TIM_MspPostInit(&htim2);
 
 }
 
@@ -807,16 +736,24 @@ void esp_event(char *recvBuf)
         if (!strcmp(pArray[2], "ON"))
         {
             // 모든 장치 정지 명령 내리기(모든 플래그 True로)
+        	fanFlag = true;
+        	ledFlag = true;
+        	lockFlag = true;
+        	sprintf(sendBuf, "[%s]%s@%s\n", pArray[0], pArray[1], pArray[2]);
         }
         else if (!strcmp(pArray[2], "OFF"))
         {
             // 모든 장치 정지 명령 취소(모든 플래그 false로)
+        	fanFlag = false;
+        	ledFlag	= false;
+        	lockFlag = false;
+        	sprintf(sendBuf, "[%s]%s@%s\n", pArray[0], pArray[1], pArray[2]);
         }
     }
     else if (!strcmp(pArray[1], "STATE"))
     {
         // 현재 매장의 상태 전송하기
-        sprintf(sendBuf, "[%s]%s@%s@%d@%d@%d@%d@%d\n", pArray[0], pArray[1], temp, humi, ledState, lockState, customerCount, fanSpeed);
+        sprintf(sendBuf, "[%s]%s@%s@%d@%d@%d@%d@%d\n", pArray[0], pArray[1], temp, humi, ledState, lockFlag, customerCount, fanSpeed);
     }
     else if (!strcmp(pArray[1], "FAN")) // 팬 회전수 0~1000
     {
@@ -883,9 +820,16 @@ void fanControl(int fanSpeed)
 
 void ledControl(int bright)
 {
-    ledState = bright;                               // 전역변수에 저장
-    int realLedState = map(bright, 0, 100, 0, 1000); // 써지는 실제값
-    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_1, realLedState);
+	if (!ledFlag)
+	{
+		ledState = bright;                               // 전역변수에 저장
+		int realLedState = map(bright, 0, 100, 0, 1000); // 써지는 실제값
+		__HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_1, realLedState);
+	}
+	else if(ledFlag)
+	{
+		__HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_1, 0);
+	}
 }
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
