@@ -281,7 +281,7 @@ int main(void)
 
 		if((outDoorSensor.distance <= 30.0 || inDoorSensor.distance <= 30.0)  && !closeFlag)
 		{
-			__HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_1, 1700);
+			__HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_1, 1000);
 			closeFlag = 1;
 		}
     /* USER CODE END WHILE */
@@ -634,7 +634,7 @@ static void MX_TIM4_Init(void)
     Error_Handler();
   }
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 0;
+  sConfigOC.Pulse = 500;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)

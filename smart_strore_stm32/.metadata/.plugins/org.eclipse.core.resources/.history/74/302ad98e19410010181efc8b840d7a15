@@ -260,7 +260,7 @@ int main(void)
 			{
 				if (closeFlag)
 				{
-					__HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_1, 0);
+					__HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_1, 1500);
 					closeFlag = 0;
 				}
 			}
@@ -279,16 +279,17 @@ int main(void)
 		printf("in distance : %f\r\n", inDoorSensor.distance);
 		printf("out distance : %f\r\n", outDoorSensor.distance);
 
-		if((outDoorSensor.distance <= 30.0 || inDoorSensor.distance <= 30.0)  && !closeFlag)
+		if((outDoorSensor.distance <= 20.0 || inDoorSensor.distance <= 20.0)  && !closeFlag)
 		{
 			__HAL_TIM_SetCompare(&htim2,TIM_CHANNEL_1, 1700);
 			closeFlag = 1;
 		}
     /* USER CODE END WHILE */
-
+  }
     /* USER CODE BEGIN 3 */
   /* USER CODE END 3 */
 }
+
 
 /**
   * @brief System Clock Configuration
@@ -634,7 +635,7 @@ static void MX_TIM4_Init(void)
     Error_Handler();
   }
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 0;
+  sConfigOC.Pulse = 500;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
@@ -985,6 +986,7 @@ void Error_Handler(void)
   __disable_irq();
   while (1)
   {
+	  printf("error\r\n");
   }
   /* USER CODE END Error_Handler_Debug */
 }
