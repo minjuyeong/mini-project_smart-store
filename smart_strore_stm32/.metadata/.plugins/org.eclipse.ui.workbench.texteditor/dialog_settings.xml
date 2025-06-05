@@ -3,6 +3,7 @@
 	<item key="hasShownOverlayPopupBefore" value="true"/>
 	<item key="replaceBarOpen" value="false"/>
 	<list key="searchhistory">
+		<item value="closeFlag"/>
 		<item value="pulseWidth"/>
 		<item value="plusewidth"/>
 		<item value="htim2"/>

@@ -78,19 +78,11 @@ volatile unsigned int tim3Sec;
 int humi;              // 습도, 정수로만
 char temp[10];         // 온도는, 소수점 앞뒤로 따로 저장되므로 문자열로 한번에 저장
 int customerCount = 0; // 현재 매장 내 손님 수 저장(인체감지 센서)
-int ledState;          // led(조명의 밝기) 저장
+int ledState =20;          // led(조명의 밝기) 저장
 int fanSpeed = 0;      // ez모터의 회전수 저장	//0~1000
-
-// 각 장치의 작동 가능 플래그, 각 플래그들이 true면 값을 수정할 수 있다.
-// allstop 명
-bool fanFlag = false;
-bool ledFlag = false;
-bool lockFlag;        // true면 lock faluse 면 off
-
 
 __IO uint16_t ADC1ConvertValue[2] = {0};
 __IO int adcFlag = 0;
-int closeFlag = 1;
 
 typedef struct
 {
@@ -101,6 +93,10 @@ typedef struct
 Data outDoorSensor = {0.0, 0};
 Data inDoorSensor = {0.0, 0};
 
+int lockFlag = 0;
+
+bool inCustomer = false;
+int inCustomerTimer = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -205,6 +201,7 @@ int main(void)
             strcpy(strBuff, strchr((char *)cb_data.buf, '['));
             memset(cb_data.buf, 0x0, sizeof(cb_data.buf));
             cb_data.length = 0;
+            ledControl(ledState);
             esp_event(strBuff);
         }
         if (rx2Flag)
@@ -233,33 +230,64 @@ int main(void)
                     sprintf(temp, "%d.%d", dht11Data.temp_byte1, dht11Data.temp_byte2);
                     // 습도 데이터 전역변수 humi 에 저장
                     humi = dht11Data.rh_byte1;
+
+                    //온도에 따라 팬 속도 조절
+                    float fanContorlTemp = atof(temp);
+//                    if(fanContorlTemp > 22)
+//                    	fanControl(300);
+                    if(fanContorlTemp > 23)
+                    	fanControl(400);
+                    else if(fanContorlTemp > 25)
+                    	fanControl(600);
+                    else if(fanContorlTemp > 27)
+                    	fanControl(800);
+                    else if(fanContorlTemp > 30)
+                    	fanControl(1000);
+
                 }
                 else
                     printf("DHT11 response error\r\n");
             }
-        }
 
-        // outdoorsensor 거리 변환
-        float voltage = (ADC1ConvertValue[0] / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
-        if (voltage < 0.1f)
-            voltage = 0.1f;
-        outDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
+			// outdoorsensor 거리 변환
+			float voltage = (ADC1ConvertValue[0] / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
+			if (voltage < 0.1f)
+				voltage = 0.1f;
+			outDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
 
-        // indoorsensor 거리 변환
-        voltage = (ADC1ConvertValue[1] / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
-        if (voltage < 0.1f)
-            voltage = 0.1f;
-        inDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
-//        printf("in distance : %f\r\n", inDoorSensor.distance);
-//        printf("out distance : %f\r\n", outDoorSensor.distance);
+			// indoorsensor 거리 변환
+			voltage = (ADC1ConvertValue[1] / 4095.0f) * 3.3f; // 12-bit ADC의 최대 값은 4095
+			if (voltage < 0.1f)
+				voltage = 0.1f;
+			inDoorSensor.distance = 27.86f / pow(voltage, 1.15f);
 
-//        if (outDoorSensor.distance < 20 || inDoorSensor.distance < 20)
-//        {
-//            char sendBuf[MAX_UART_COMMAND_LEN] = {0};
-//
-//        	sprintf(sendBuf, "[A_DOOR]DOOR@OPEN\n");
-//        	esp_send_data(sendBuf);
-//        }
+			printf("in distance : %f\r\n", inDoorSensor.distance);
+			printf("out distance : %f\r\n", outDoorSensor.distance);
+
+			//led와 자동문, 오늘 손님 수 카운트
+			if (outDoorSensor.distance < 17.0 || inDoorSensor.distance < 17.0)
+			{
+				if(outDoorSensor.distance < 17.0)
+					customerCount++;	//오늘 손님 누적
+
+				ledControl(100);
+				char sendBuf[MAX_UART_COMMAND_LEN] = {0};
+
+				inCustomer = true;
+
+				sprintf(sendBuf, "[A_DOOR]DOOR@OPEN\n");
+				esp_send_data(sendBuf);
+			}
+
+			if(inCustomer)
+				inCustomerTimer++;
+			if(inCustomerTimer > 60)
+			{
+				inCustomerTimer = 0;
+				ledControl(ledState);
+			}
+		}
+
 
 
     /* USER CODE END WHILE */
@@ -736,17 +764,17 @@ void esp_event(char *recvBuf)
         if (!strcmp(pArray[2], "ON"))
         {
             // 모든 장치 정지 명령 내리기(모든 플래그 True로)
-        	fanFlag = true;
-        	ledFlag = true;
-        	lockFlag = true;
+        	fanControl(0);
+        	ledControl(0);
+        	lockFlag = 1;
         	sprintf(sendBuf, "[%s]%s@%s\n", pArray[0], pArray[1], pArray[2]);
         }
         else if (!strcmp(pArray[2], "OFF"))
         {
             // 모든 장치 정지 명령 취소(모든 플래그 false로)
-        	fanFlag = false;
-        	ledFlag	= false;
-        	lockFlag = false;
+        	fanControl(500);
+        	ledControl(50);
+        	lockFlag = 0;
         	sprintf(sendBuf, "[%s]%s@%s\n", pArray[0], pArray[1], pArray[2]);
         }
     }
@@ -773,8 +801,9 @@ void esp_event(char *recvBuf)
         }
         else
         {
-            ledControl(atoi(pArray[2]));
-            sprintf(sendBuf, "[%s]%s@%d\n", pArray[0], pArray[1], atoi(pArray[2]));
+        	ledState = atoi(pArray[2]);
+            ledControl(ledState);
+            sprintf(sendBuf, "[%s]%s@%d\n", pArray[0], pArray[1], ledState);
         }
     }
     else if (!strncmp(pArray[1], " New conn", 8))
@@ -812,21 +841,16 @@ long map(long x, long in_min, long in_max, long out_min, long out_max)
 
 void fanControl(int fanSpeed)
 {
-    if (!fanFlag) // 플래그들은 0일 때만 동작을 의미함.
-    {
-        __HAL_TIM_SetCompare(&htim4, TIM_CHANNEL_1, fanSpeed);
-    }
-
+	__HAL_TIM_SetCompare(&htim4, TIM_CHANNEL_1, fanSpeed);
 }
 
 void ledControl(int bright)
 {
-	if (!ledFlag)
-	{
-		ledState = bright;                               // 전역변수에 저장
-		int realLedState = map(bright, 0, 100, 0, 1000); // 써지는 실제값
-		__HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_1, realLedState);
-	}
+//	ledState = bright;
+	if (bright > 100)
+		bright = 100;
+	int realLedState = map(bright, 0, 100, 0, 1000); // 써지는 실제값
+	__HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_1, realLedState);
 }
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
