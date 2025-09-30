@@ -4,13 +4,19 @@
 
 해당 프로젝트의 목적은 무인 매장의 효율성을 높이고 사업주의 편의성을 높이는 것입니다.
 
-## 프로젝트 개요
+## 📋 프로젝트 개요
 
 - **프로젝트 유형**: 미니 프로젝트
-- **주요 기술**: STM32, Arduino, C언어, TCP/IP 통신
+- **주요 기술**: STM32, Arduino, C언어, TCP/IP 통신, Bluetooth 통신
 - **주요 기능**: 자동 출입문, 조명 제어, 온습도 관리, 환기 시스템, 원격 모니터링
 
-## 시스템 구성
+## 🎥 데모 영상
+
+- [A지점 구현 영상 - STM32](asset/A지점%20구현%20영상%20-%20stm32.mp4)
+- [경비실 구현 영상 - Arduino Uno](asset/경비실%20구현%20영상%20-%20아두이노%20우노.mp4)
+- [앱 원격제어 구현 영상](asset/어플%20원격제어%20구현%20영상.mp4)
+
+## 🏗️ 시스템 구성
 
 ```
 ┌─────────────┐      TCP/IP      ┌─────────────┐      Bluetooth    ┌─────────────┐
@@ -81,7 +87,9 @@ B PASSWD
 BOSS PASSWD
 ```
 
-### 3. Arduino 경비실 제어 시스템
+### 3. Arduino 경비실 제어 시스템 (Office)
+
+**파일**: `smart_store_office_arduino.ino`
 
 **하드웨어**
 - MCU: Arduino Uno/Nano
@@ -103,13 +111,28 @@ BOSS PASSWD
 - LCD 실시간 시각 표시
 - 서버 시간 동기화
 
-**파일 구조**
+**LCD 표시 예시**
 ```
-smart_store_arduino/
-└── smart_store_arduino.ino    # 경비실 제어 메인 코드
+25.3`C led:100
+lock h:5 f:600
 ```
 
-## 통신 프로토콜 (API 명세)
+### 4. Arduino Bluetooth 브리지 (선택 사항)
+
+**파일**: `smart_store_arduino.c`
+
+라즈베리파이 또는 Linux 시스템에서 Bluetooth를 통해 Arduino와 서버 간 통신을 중계하는 브리지 프로그램입니다.
+
+**실행 방법**
+```bash
+# 컴파일
+gcc -o smart_store_arduino smart_store_arduino.c -lbluetooth -lpthread
+
+# 실행
+./smart_store_arduino <서버IP> <포트> <클라이언트ID>
+```
+
+## 📡 통신 프로토콜 (API 명세)
 
 ### 메시지 형식
 ```
@@ -312,7 +335,7 @@ pArray[1] = "25.09.30 14:35:20 Mon"  // 시간 문자열
 // [1][18-20]: 요일(Mon)
 ```
 
-## 주요 기능 상세
+## ⚙️ 주요 기능 상세
 
 ### 1. 자동 출입 관리
 - 매장 외부 센서: 고객 진입 감지 및 카운팅
@@ -344,7 +367,7 @@ pArray[1] = "25.09.30 14:35:20 Mon"  // 시간 문자열
   ```
 - 긴급 정지 명령 전송
 
-## 개발 환경 및 도구
+## 🛠️ 개발 환경 및 도구
 
 - **STM32**: STM32CubeIDE, HAL Library
 - **Server**: GCC, Linux/Unix, pthread
@@ -355,8 +378,9 @@ pArray[1] = "25.09.30 14:35:20 Mon"  // 시간 문자열
   - MsTimer2
   - Keypad
   - LiquidCrystal_I2C
+  - bluetooth (Linux/Unix)
 
-## 설치 및 실행
+## 📦 설치 및 실행
 
 ### 1. 서버 설정
 ```bash
@@ -379,10 +403,10 @@ cd smart_strore_stm32/smart_store_stm32
 # Run → Debug (또는 F11)
 ```
 
-### 3. Arduino 펌웨어 업로드
+### 3. Arduino 경비실 펌웨어 업로드
 ```bash
 # Arduino IDE에서 열기
-# smart_store_arduino/smart_store_arduino.ino
+# smart_store_office_arduino.ino
 
 # 필요한 라이브러리 설치:
 # - MsTimer2
@@ -392,7 +416,16 @@ cd smart_strore_stm32/smart_store_stm32
 # 보드 선택 후 업로드
 ```
 
-## 네트워크 설정
+### 4. Bluetooth 브리지 실행 (선택 사항)
+```bash
+# 컴파일
+gcc -o smart_store_arduino smart_store_arduino.c -lbluetooth -lpthread
+
+# 실행 (HC-06 MAC 주소 수정 필요)
+./smart_store_arduino 192.168.0.100 5000 BOSS
+```
+
+## 🌐 네트워크 설정
 
 ### ESP-01 WiFi 설정
 ```
@@ -408,7 +441,12 @@ AT+CIPSTART="TCP","서버IP",5000  # 서버 연결
 - Arduino Bluetooth: 9600 baud
 - STM32 Debug (UART2): 115200 baud
 
-## 시스템 동작 흐름
+### Bluetooth 설정
+- HC-06 MAC 주소: `98:DA:60:02:6B:43` (코드 내 수정 가능)
+- Baud Rate: 9600
+- RFCOMM Channel: 1
+
+## 🔄 시스템 동작 흐름
 
 ```
 1. 시스템 초기화
@@ -431,11 +469,60 @@ AT+CIPSTART="TCP","서버IP",5000  # 서버 연결
 7. 긴급 상황 처리 (ALLSTOP)
 ```
 
-## 라이선스
+## 📁 프로젝트 파일 구조
+
+```
+mini-project_smart-store/
+├── README.md                              # 프로젝트 문서
+├── store_server.c                         # TCP/IP 중앙 서버
+├── smart_store_office_arduino.ino         # Arduino 경비실 제어 (메인)
+├── smart_store_arduino.c                  # Bluetooth 브리지 (선택)
+├── smart_strore_stm32/                    # STM32 프로젝트
+│   └── smart_store_stm32/
+│       └── Core/
+│           ├── Src/
+│           │   ├── main.c                 # 매장 제어 메인
+│           │   ├── dht.c                  # DHT11 드라이버
+│           │   └── esp.c                  # ESP-01 통신
+│           └── Inc/
+│               ├── main.h
+│               ├── dht.h
+│               └── esp.h
+├── asset/                                 # 데모 영상
+│   ├── A지점 구현 영상 - stm32.mp4
+│   ├── 경비실 구현 영상 - 아두이노 우노.mp4
+│   └── 어플 원격제어 구현 영상.mp4
+└── 무인 매장을 위한 자동화 IoT 시스템.pptx  # 발표 자료
+```
+
+## 🔧 트러블슈팅
+
+### STM32 연결 문제
+- ESP-01 AT 명령어 응답 확인
+- WiFi SSID/Password 확인
+- 서버 IP 주소 및 포트 확인
+- UART 보드레이트 확인 (38400)
+
+### Arduino Bluetooth 연결 문제
+- HC-06 페어링 확인 (기본 PIN: 1234)
+- MAC 주소 확인 및 코드 수정
+- SoftwareSerial 핀 연결 확인 (RX:10, TX:11)
+
+### 서버 연결 문제
+- 방화벽 설정 확인
+- idpasswd.txt 파일 존재 및 형식 확인
+- 포트 사용 가능 여부 확인 (`netstat -an | grep 5000`)
+
+## 📄 라이선스
 
 이 프로젝트는 교육 목적의 미니 프로젝트입니다.
 
-## 개발자
+## 👥 개발자
 
-- @minjuyeong 
-- @uniljetstream
+- [@minjuyeong](https://github.com/minjuyeong)
+- [@uniljetstream](https://github.com/uniljetstream)
+
+---
+
+**프로젝트 기간**: 2025년
+**개발 환경**: STM32CubeIDE 1.18.1, Arduino IDE, Linux GCC
